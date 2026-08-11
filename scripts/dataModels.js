@@ -5,6 +5,7 @@ export class PersonnelFileDataModel extends foundry.abstract.TypeDataModel {
       fullName: new StringField({ required: true, blank: true, initial: "" }),
       alias: new StringField({ required: true, blank: true, initial: "" }),
       gender: new StringField({ required: true, blank: true, initial: "" }),
+      birthDate: new StringField({ required: true, blank: true, initial: "" }),
       role: new StringField({ required: true, blank: true, initial: "" }),
       appearance: new SchemaField({
         height: new StringField({ required: true, blank: true, initial: "" }),

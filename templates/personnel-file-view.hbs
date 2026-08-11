@@ -1,13 +1,13 @@
-<div class="journal-entry-page personnel-file">
-    <div class="watermark-stamp">TAJNE</div>
+<div class="journal-entry-page personnel-file theme-{{theme}}">
+    <div class="watermark-stamp">{{watermark}}</div>
 
     <header class="police-header">
         <div class="header-left">
-            <span class="header-org">{{localize "COC-CASE-FILES.HeaderTop"}}</span>
-            <span class="header-sub">{{localize "COC-CASE-FILES.HeaderSub"}}</span>
+            <span class="header-org">{{headerTop}}</span>
+            <span class="header-sub">{{headerSub}}</span>
         </div>
         <div class="header-right">
-            <span class="file-number">SYGN: AKTA-90/{{document._id}}</span>
+            <span class="file-number">SYGN: AKTA/{{document._id}}</span>
         </div>
     </header>
 
@@ -119,7 +119,7 @@
     </section>
 
     <footer class="police-footer">
-        <span>KOMENDA GŁÓWNA POLICJI - SEKCYJNA KARTA EWIDENCYJNA</span>
-        <span>FORM-POL-90/A</span>
+        <span>{{footerLeft}}</span>
+        <span>{{footerRight}}</span>
     </footer>
 </div>

@@ -35,10 +35,43 @@ export class PersonnelFileSheet extends JournalPageSheet {
     const canPropose = doc.testUserPermission(game.user, "OBSERVER");
     const proposals = doc.getFlag("coc-case-files", "proposals") || {};
 
+    // Get selected Era Theme setting
+    const theme = game.settings.get("coc-case-files", "theme") || "polska-80-90";
+    context.theme = theme;
+
+    // Theme specific headers & watermarks
+    if (theme === "polska-20lecie") {
+      context.headerTop = "POLICJA PAŃSTWOWA RZECZYPOSPOLITEJ POLSKIEJ";
+      context.headerSub = "KARTA REJESTRACYJNA OSÓB PODEJRZANYCH";
+      context.watermark = "TAJNE / POUFNE";
+      context.footerLeft = "KOMENDA GŁÓWNA POLICJI PAŃSTWOWEJ - WYDZIAŁ ŚLEDCZY";
+      context.footerRight = "FORM-PP-1924";
+    } else if (theme === "polska-dzis") {
+      context.headerTop = "POLICJA - KOMENDA GŁÓWNA POLICJI";
+      context.headerSub = "SYSTEM EWIDENCJI MAJĄTKOWO-OSOBOWEJ";
+      context.watermark = "ZASTRZEŻONE";
+      context.footerLeft = "POLICJA RZECZYPOSPOLITEJ POLSKIEJ - SYSTEM KIP";
+      context.footerRight = "FORM-POL-2024";
+    } else if (theme === "uniwersalny") {
+      context.headerTop = "DOSSIER / CASE FILE RECORD";
+      context.headerSub = "CONFIDENTIAL REGISTRATION FORM";
+      context.watermark = "CONFIDENTIAL";
+      context.footerLeft = "GENERAL INVESTIGATION BUREAU - CASE FILE";
+      context.footerRight = "FORM-GEN-01";
+    } else {
+      // Default polska-80-90
+      context.headerTop = game.i18n.localize("COC-CASE-FILES.HeaderTop");
+      context.headerSub = game.i18n.localize("COC-CASE-FILES.HeaderSub");
+      context.watermark = "TAJNE";
+      context.footerLeft = "KOMENDA GŁÓWNA POLICJI - SEKCYJNA KARTA EWIDENCYJNA";
+      context.footerRight = "FORM-POL-90/A";
+    }
+
     const fieldDefinitions = [
       { key: "fullName", label: game.i18n.localize("COC-CASE-FILES.FullName"), value: doc.system.fullName || "" },
       { key: "alias", label: game.i18n.localize("COC-CASE-FILES.Alias"), value: doc.system.alias || "" },
       { key: "gender", label: game.i18n.localize("COC-CASE-FILES.Gender"), value: doc.system.gender || "" },
+      { key: "birthDate", label: game.i18n.localize("COC-CASE-FILES.BirthDate"), value: doc.system.birthDate || "" },
       { key: "appearance.height", label: game.i18n.localize("COC-CASE-FILES.Height"), value: doc.system.appearance?.height || "" },
       { key: "appearance.build", label: game.i18n.localize("COC-CASE-FILES.Build"), value: doc.system.appearance?.build || "" },
       { key: "appearance.hair", label: game.i18n.localize("COC-CASE-FILES.Hair"), value: doc.system.appearance?.hair || "" },

@@ -19,6 +19,10 @@
             <input type="text" name="system.gender" value="{{document.system.gender}}">
         </div>
         <div class="form-group">
+            <label>{{localize "COC-CASE-FILES.BirthDate"}}</label>
+            <input type="text" name="system.birthDate" value="{{document.system.birthDate}}">
+        </div>
+        <div class="form-group">
             <label>{{localize "COC-CASE-FILES.Role"}}</label>
             <select name="system.role">
                 {{selectOptions roles selected=document.system.role localize=true}}

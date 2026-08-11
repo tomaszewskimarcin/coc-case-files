@@ -10,6 +10,7 @@
     "FullName": "Imię i Nazwisko",
     "Alias": "Pseudonim / Ksywa",
     "Gender": "Płeć",
+    "BirthDate": "Data urodzenia",
     "Appearance": "Rysopis i szczegóły",
     "Height": "Wzrost",
     "Build": "Budowa ciała",
@@ -33,7 +34,9 @@
     "SubmitProposal": "Wyślij do GM",
     "PendingProposal": "Zgłoszona propozycja:",
     "PendingStatus": "(Oczekuje na weryfikację GM)",
-    "UnassignedRole": "-- Nieustalona --"
+    "UnassignedRole": "-- Nieustalona --",
+    "SettingThemeName": "Motyw / Szablon Epoki Akt",
+    "SettingThemeHint": "Wybierz styl wizualny i nagłówek epoki historycznej dla Akt Osobowych."
   },
   "TYPES": {
     "JournalEntryPage": {

@@ -10,6 +10,7 @@
     "FullName": "Full Name",
     "Alias": "Alias / Nickname",
     "Gender": "Gender",
+    "BirthDate": "Date of Birth",
     "Appearance": "Appearance & Details",
     "Height": "Height",
     "Build": "Build",
@@ -33,7 +34,9 @@
     "SubmitProposal": "Send to GM",
     "PendingProposal": "Pending Proposal:",
     "PendingStatus": "(Awaiting GM Verification)",
-    "UnassignedRole": "-- Unassigned --"
+    "UnassignedRole": "-- Unassigned --",
+    "SettingThemeName": "Dossier Era / Theme",
+    "SettingThemeHint": "Select the visual theme and historical era for Personnel Files."
   },
   "TYPES": {
     "JournalEntryPage": {

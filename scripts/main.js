@@ -18,6 +18,25 @@ Hooks.once("init", () => {
     label: "COC-CASE-FILES.PageType"
   });
 
+  // Register Module World Setting for Era Themes
+  game.settings.register("coc-case-files", "theme", {
+    name: game.i18n.localize("COC-CASE-FILES.SettingThemeName"),
+    hint: game.i18n.localize("COC-CASE-FILES.SettingThemeHint"),
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "polska-80-90": "Polska: Lata 80. i 90. (Policja / MO)",
+      "polska-dzis": "Polska: Współczesna Policja",
+      "polska-20lecie": "Polska: II Rzeczpospolita (Policja Państwowa 1919-1939)",
+      "uniwersalny": "Uniwersalny / Klasyczny (Lata 20, 80, Współczesność)"
+    },
+    default: "polska-80-90",
+    onChange: () => {
+      ui.journals?.render(true);
+    }
+  });
+
   // Listen for socket messages from non-Owner Observers proposing details
   game.socket.on("module.coc-case-files", async (data) => {
     // Only GM processes incoming proposals from Observers
