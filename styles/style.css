@@ -1,0 +1,120 @@
+/* 1990s Polish Police Aesthetic for Personnel Files */
+.journal-entry-page.personnel-file {
+  background-color: #d8ceb8; /* Brownish gray folder paper */
+  color: #1a1a1a;
+  font-family: "Courier New", Courier, monospace; /* Typewriter font */
+  padding: 20px;
+  background-image: repeating-linear-gradient(
+      transparent,
+      transparent 50px,
+      rgba(0, 0, 0, 0.05) 50px,
+      rgba(0, 0, 0, 0.05) 51px
+    );
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.1);
+  border: 1px solid #b3a693;
+}
+
+.journal-entry-page.personnel-file header {
+  text-align: center;
+  border-bottom: 2px dashed #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+.journal-entry-page.personnel-file header h1 {
+  font-weight: bold;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  border: none;
+}
+
+.journal-entry-page.personnel-file .form-group {
+  margin-bottom: 15px;
+}
+
+.journal-entry-page.personnel-file label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #333;
+}
+
+/* Stamped ink styling for roles */
+.journal-entry-page.personnel-file .role-stamp {
+  display: inline-block;
+  padding: 5px 15px;
+  border: 3px solid;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transform: rotate(-5deg);
+  margin-bottom: 15px;
+  opacity: 0.8;
+}
+
+.journal-entry-page.personnel-file .role-suspect {
+  color: #c0392b;
+  border-color: #c0392b;
+}
+
+.journal-entry-page.personnel-file .role-witness {
+  color: #2980b9;
+  border-color: #2980b9;
+}
+
+.journal-entry-page.personnel-file .role-victim {
+  color: #27ae60;
+  border-color: #27ae60;
+}
+
+/* Player Propose Inputs */
+.journal-entry-page.personnel-file input.player-propose {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px dashed #7f8c8d;
+  font-family: "Courier New", Courier, monospace;
+  padding: 5px;
+  width: calc(100% - 150px);
+  color: #555;
+}
+
+.journal-entry-page.personnel-file input.player-propose:focus {
+  outline: none;
+  border-color: #333;
+  background: #fff;
+}
+
+/* GM Approval Section */
+.journal-entry-page.personnel-file .proposal-alert {
+  background: #f39c1220;
+  border-left: 4px solid #f39c12;
+  padding: 10px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.journal-entry-page.personnel-file .proposal-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.journal-entry-page.personnel-file .proposal-actions button.approve:hover {
+  color: #27ae60;
+}
+
+.journal-entry-page.personnel-file .proposal-actions button.reject:hover {
+  color: #c0392b;
+}
+
+/* Edit Sheet styles */
+.personnel-file-edit-sheet .form-group input,
+.personnel-file-edit-sheet .form-group select {
+  width: 100%;
+}

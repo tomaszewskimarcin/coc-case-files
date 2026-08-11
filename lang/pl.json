@@ -1,0 +1,24 @@
+{
+  "COC-CASE-FILES": {
+    "PageType": "Akta Osobowe",
+    "Role": "Rola w sprawie",
+    "Roles": {
+      "suspect": "Podejrzany",
+      "witness": "Świadek",
+      "victim": "Ofiara"
+    },
+    "Appearance": "Rysopis i szczegóły",
+    "Height": "Wzrost",
+    "Build": "Budowa ciała",
+    "Hair": "Kolor włosów",
+    "Eyes": "Kolor oczów",
+    "Marks": "Znaki szczególne",
+    "Address": "Adres",
+    "Description": "Notatki ogólne",
+    "ProposeDetail": "Wpisz aby zaproponować...",
+    "ProposedValue": "Propozycja gracza:",
+    "Approve": "Zatwierdź",
+    "Reject": "Odrzuć",
+    "ApprovedMessage": "Zatwierdzono informację '{field}'. Przyznano +1 Punkt Chaosu."
+  }
+}

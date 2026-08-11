@@ -1,0 +1,24 @@
+{
+  "COC-CASE-FILES": {
+    "PageType": "Personnel File",
+    "Role": "Role in Case",
+    "Roles": {
+      "suspect": "Suspect",
+      "witness": "Witness",
+      "victim": "Victim"
+    },
+    "Appearance": "Appearance & Details",
+    "Height": "Height",
+    "Build": "Build",
+    "Hair": "Hair Color",
+    "Eyes": "Eye Color",
+    "Marks": "Distinguishing Marks",
+    "Address": "Address",
+    "Description": "General Notes",
+    "ProposeDetail": "Type to propose information...",
+    "ProposedValue": "Proposed by player:",
+    "Approve": "Approve",
+    "Reject": "Reject",
+    "ApprovedMessage": "Approved edit to '{field}'. +1 Chaos Point awarded."
+  }
+}

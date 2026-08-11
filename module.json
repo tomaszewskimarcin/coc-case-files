@@ -1,0 +1,46 @@
+{
+  "id": "coc-case-files",
+  "title": "Call of Cthulhu Case Files",
+  "description": "Custom, interactive Journal Entry templates (starting with a 'Personnel File') designed for a 1990s Polish Police investigation setting, featuring player proposal mechanics.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "12"
+  },
+  "authors": [
+    {
+      "name": "tomaszewskimarcin"
+    }
+  ],
+  "scripts": [
+    "scripts/main.js"
+  ],
+  "styles": [
+    "styles/style.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "pl",
+      "name": "Polski",
+      "path": "lang/pl.json"
+    }
+  ],
+  "relationships": {
+    "systems": [],
+    "requires": [],
+    "optional": [
+      {
+        "id": "coc-victory-points",
+        "type": "module",
+        "compatibility": {}
+      }
+    ]
+  },
+  "manifest": "https://raw.githubusercontent.com/tomaszewskimarcin/coc-case-files/refs/heads/master/module.json",
+  "download": "https://github.com/tomaszewskimarcin/coc-case-files/archive/master.zip"
+}
