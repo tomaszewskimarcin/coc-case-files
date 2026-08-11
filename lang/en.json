@@ -20,5 +20,10 @@
     "Approve": "Approve",
     "Reject": "Reject",
     "ApprovedMessage": "Approved edit to '{field}'. +1 Chaos Point awarded."
+  },
+  "TYPES": {
+    "JournalEntryPage": {
+      "personnel-file": "Personnel File"
+    }
   }
 }

@@ -1,4 +1,4 @@
-export class PersonnelFileSheet extends foundry.applications.sheets.JournalPageSheet {
+export class PersonnelFileSheet extends foundry.applications.api.DocumentSheetV2 {
   /** @override */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ["personnel-file-sheet"],

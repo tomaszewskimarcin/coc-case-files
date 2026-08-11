@@ -20,5 +20,10 @@
     "Approve": "Zatwierdź",
     "Reject": "Odrzuć",
     "ApprovedMessage": "Zatwierdzono informację '{field}'. Przyznano +1 Punkt Chaosu."
+  },
+  "TYPES": {
+    "JournalEntryPage": {
+      "personnel-file": "Akta Osobowe"
+    }
   }
 }
