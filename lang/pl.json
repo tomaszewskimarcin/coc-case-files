@@ -25,7 +25,11 @@
     "ApprovedMessage": "Zatwierdzono informację '{field}'. Przyznano +1 Punkt Chaosu.",
     "LockedField": "Informacja Potwierdzona (Zablokowano)",
     "HeaderTop": "RZECZPOSPOLITA POLSKA - POLICJA",
-    "HeaderSub": "AKTA OSOBOWE / KARTA REJESTRACYJNA"
+    "HeaderSub": "AKTA OSOBOWE / KARTA REJESTRACYJNA",
+    "ProposalSubmitted": "Propozycja została wysłana do Mistrza Gry.",
+    "ProposalReceived": "Otrzymano nową propozycję do akt '{name}'.",
+    "ProposalRejected": "Propozycja została odrzucona.",
+    "FieldLockedWarn": "Ta rubryka została już zablokowana i zatwierdzona."
   },
   "TYPES": {
     "JournalEntryPage": {

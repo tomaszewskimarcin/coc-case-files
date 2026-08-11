@@ -24,20 +24,20 @@ Hooks.once("init", () => {
     if (!game.user.isGM) return;
 
     if (data.action === "propose") {
-      const { pageId, field, value } = data;
+      const { pageUuid, field, value } = data;
       
-      // Find target page across all journal entries
-      let targetPage = null;
-      for (const journal of game.journal) {
-        targetPage = journal.pages.get(pageId);
-        if (targetPage) break;
-      }
+      // Cannonical document fetch using UUID
+      const targetPage = await fromUuid(pageUuid);
 
       if (targetPage) {
         const proposals = foundry.utils.deepClone(targetPage.getFlag("coc-case-files", "proposals") || {});
         proposals[field] = value;
         await targetPage.setFlag("coc-case-files", "proposals", proposals);
-        ui.notifications.info(`Otrzymano nową propozycję do akt "${targetPage.name}".`);
+        
+        ui.notifications.info(game.i18n.format("COC-CASE-FILES.ProposalReceived", { name: targetPage.name }));
+
+        // Re-render open sheets for GM if currently visible
+        targetPage.sheet?.render(false);
       }
     }
   });

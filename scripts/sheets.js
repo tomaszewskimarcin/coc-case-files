@@ -24,7 +24,6 @@ export class PersonnelFileSheet extends JournalPageSheet {
 
     const doc = this.document;
     const isGM = game.user.isGM;
-    // Allow users with Observer or higher permissions to propose edits
     const canPropose = doc.testUserPermission(game.user, "OBSERVER");
     const proposals = doc.getFlag("coc-case-files", "proposals") || {};
 
@@ -86,7 +85,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
           // Verify field is not already locked/confirmed
           const currentVal = foundry.utils.getProperty(this.document.system, field);
           if (currentVal && currentVal.trim()) {
-            ui.notifications.warn("Ta rubryka została już zablokowana i zatwierdzona.");
+            ui.notifications.warn(game.i18n.localize("COC-CASE-FILES.FieldLockedWarn"));
             return;
           }
 
@@ -96,16 +95,16 @@ export class PersonnelFileSheet extends JournalPageSheet {
             proposals[field] = val;
             await this.document.setFlag("coc-case-files", "proposals", proposals);
           } else {
-            // Socket emission for non-Owner Observers
+            // Socket emission for non-Owner Observers (using UUID)
             game.socket.emit("module.coc-case-files", {
               action: "propose",
-              pageId: this.document.id,
+              pageUuid: this.document.uuid,
               field: field,
               value: val
             });
           }
 
-          ui.notifications.info("Propozycja została wysłana do Mistrza Gry.");
+          ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalSubmitted"));
           input.value = "";
         }
       };
@@ -159,7 +158,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
         if (proposals[field] !== undefined) {
           delete proposals[field];
           await this.document.setFlag("coc-case-files", "proposals", proposals);
-          ui.notifications.info("Propozycja została odrzucona.");
+          ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
 
           // Force immediate re-render to hide proposal box instantly
           this.render(true);

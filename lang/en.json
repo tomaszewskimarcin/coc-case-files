@@ -25,7 +25,11 @@
     "ApprovedMessage": "Approved edit to '{field}'. +1 Chaos Point awarded.",
     "LockedField": "Confirmed Information (Locked)",
     "HeaderTop": "REPUBLIC OF POLAND - POLICE",
-    "HeaderSub": "CONFIDENTIAL DOSSIER / REGISTRATION CARD"
+    "HeaderSub": "CONFIDENTIAL DOSSIER / REGISTRATION CARD",
+    "ProposalSubmitted": "Proposal submitted to the GM.",
+    "ProposalReceived": "Received a new proposal for file '{name}'.",
+    "ProposalRejected": "Proposal rejected.",
+    "FieldLockedWarn": "This field is already confirmed and locked."
   },
   "TYPES": {
     "JournalEntryPage": {
