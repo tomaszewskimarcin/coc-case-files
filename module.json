@@ -4,8 +4,8 @@
   "description": "Custom, interactive Journal Entry templates (starting with a 'Personnel File') designed for a 1990s Polish Police investigation setting, featuring player proposal mechanics.",
   "version": "1.0.0",
   "compatibility": {
-    "minimum": "12",
-    "verified": "12"
+    "minimum": "14",
+    "verified": "14"
   },
   "authors": [
     {
