@@ -1,47 +1,77 @@
 <div class="journal-entry-page personnel-file">
-    <header>
-        <h1>{{document.name}}</h1>
+    <div class="watermark-stamp">TAJNE</div>
+
+    <header class="police-header">
+        <div class="header-left">
+            <span class="header-org">{{localize "COC-CASE-FILES.HeaderTop"}}</span>
+            <span class="header-sub">{{localize "COC-CASE-FILES.HeaderSub"}}</span>
+        </div>
+        <div class="header-right">
+            <span class="file-number">SYGN: AKTA-90/{{document._id}}</span>
+        </div>
     </header>
 
-    {{#if document.system.role}}
-    <div class="role-stamp role-{{document.system.role}}">
-        {{lookup roles document.system.role}}
+    <div class="dossier-top-section">
+        <div class="dossier-title">
+            <h1>{{#if document.system.fullName}}{{document.system.fullName}}{{else}}{{document.name}}{{/if}}</h1>
+        </div>
+
+        {{#if document.system.role}}
+        <div class="role-stamp role-{{document.system.role}}">
+            {{lookup roles document.system.role}}
+        </div>
+        {{/if}}
     </div>
-    {{/if}}
 
-    <section class="details">
+    <section class="dossier-grid">
         {{#each fields as |field|}}
-        <div class="form-group">
-            <label>{{field.label}}:</label>
-            {{#if field.value}}
-                <span class="value">{{field.value}}</span>
-            {{else}}
-                {{#if ../canPropose}}
-                    <input type="text" class="player-propose" data-field="{{field.key}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+        <div class="dossier-field-row">
+            <span class="field-label">{{field.label}}:</span>
+            <div class="field-value-wrapper">
+                {{#if field.isLocked}}
+                    <span class="value confirmed-value">
+                        {{field.value}}
+                        <i class="fas fa-lock locked-badge" title="{{localize 'COC-CASE-FILES.LockedField'}}"></i>
+                    </span>
                 {{else}}
-                    <span class="value unknown">-------</span>
+                    {{#if ../canPropose}}
+                        <div class="propose-input-group">
+                            <input type="text" class="player-propose" data-field="{{field.key}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+                        </div>
+                    {{else}}
+                        <span class="value unconfirmed-placeholder">------- [BRAK DANYCH] -------</span>
+                    {{/if}}
                 {{/if}}
-            {{/if}}
 
-            {{#if ../isGM}}
-                {{#if field.proposal}}
-                <div class="proposal-alert">
-                    <span><strong>{{localize 'COC-CASE-FILES.ProposedValue'}}</strong> {{field.proposal}}</span>
-                    <div class="proposal-actions">
-                        <button type="button" class="approve" data-action="approve-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Approve'}}"><i class="fas fa-check"></i></button>
-                        <button type="button" class="reject" data-action="reject-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Reject'}}"><i class="fas fa-times"></i></button>
+                {{#if ../isGM}}
+                    {{#if field.proposal}}
+                    <div class="proposal-alert">
+                        <span class="proposal-text"><strong>{{localize 'COC-CASE-FILES.ProposedValue'}}</strong> "{{field.proposal}}"</span>
+                        <div class="proposal-actions">
+                            <button type="button" class="approve-btn" data-action="approve-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Approve'}}">
+                                <i class="fas fa-check"></i> {{localize 'COC-CASE-FILES.Approve'}}
+                            </button>
+                            <button type="button" class="reject-btn" data-action="reject-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Reject'}}">
+                                <i class="fas fa-times"></i> {{localize 'COC-CASE-FILES.Reject'}}
+                            </button>
+                        </div>
                     </div>
-                </div>
+                    {{/if}}
                 {{/if}}
-            {{/if}}
+            </div>
         </div>
         {{/each}}
     </section>
 
-    <section class="description">
+    <section class="dossier-notes">
         <h3>{{localize "COC-CASE-FILES.Description"}}</h3>
-        <div class="editor-content">
+        <div class="editor-content notes-box">
             {{{descriptionHTML}}}
         </div>
     </section>
+
+    <footer class="police-footer">
+        <span>KOMENDA GŁÓWNA POLICJI - SEKCYJNA KARTA EWIDENCYJNA</span>
+        <span>FORM-POL-90/A</span>
+    </footer>
 </div>

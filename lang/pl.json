@@ -7,19 +7,25 @@
       "witness": "Świadek",
       "victim": "Ofiara"
     },
+    "FullName": "Imię i Nazwisko",
+    "Alias": "Pseudonim / Ksywa",
+    "Gender": "Płeć",
     "Appearance": "Rysopis i szczegóły",
     "Height": "Wzrost",
     "Build": "Budowa ciała",
     "Hair": "Kolor włosów",
-    "Eyes": "Kolor oczów",
+    "Eyes": "Kolor oczu",
     "Marks": "Znaki szczególne",
-    "Address": "Adres",
-    "Description": "Notatki ogólne",
+    "Address": "Adres zamieszkania",
+    "Description": "Notatki ze sprawy i uzasadnienie",
     "ProposeDetail": "Wpisz aby zaproponować...",
     "ProposedValue": "Propozycja gracza:",
     "Approve": "Zatwierdź",
     "Reject": "Odrzuć",
-    "ApprovedMessage": "Zatwierdzono informację '{field}'. Przyznano +1 Punkt Chaosu."
+    "ApprovedMessage": "Zatwierdzono informację '{field}'. Przyznano +1 Punkt Chaosu.",
+    "LockedField": "Informacja Potwierdzona (Zablokowano)",
+    "HeaderTop": "RZECZPOSPOLITA POLSKA - POLICJA",
+    "HeaderSub": "AKTA OSOBOWE / KARTA REJESTRACYJNA"
   },
   "TYPES": {
     "JournalEntryPage": {

@@ -7,6 +7,9 @@
       "witness": "Witness",
       "victim": "Victim"
     },
+    "FullName": "Full Name",
+    "Alias": "Alias / Nickname",
+    "Gender": "Gender",
     "Appearance": "Appearance & Details",
     "Height": "Height",
     "Build": "Build",
@@ -14,12 +17,15 @@
     "Eyes": "Eye Color",
     "Marks": "Distinguishing Marks",
     "Address": "Address",
-    "Description": "General Notes",
+    "Description": "Case Notes & File Summary",
     "ProposeDetail": "Type to propose information...",
     "ProposedValue": "Proposed by player:",
     "Approve": "Approve",
     "Reject": "Reject",
-    "ApprovedMessage": "Approved edit to '{field}'. +1 Chaos Point awarded."
+    "ApprovedMessage": "Approved edit to '{field}'. +1 Chaos Point awarded.",
+    "LockedField": "Confirmed Information (Locked)",
+    "HeaderTop": "REPUBLIC OF POLAND - POLICE",
+    "HeaderSub": "CONFIDENTIAL DOSSIER / REGISTRATION CARD"
   },
   "TYPES": {
     "JournalEntryPage": {

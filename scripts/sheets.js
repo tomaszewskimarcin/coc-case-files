@@ -27,14 +27,31 @@ export class PersonnelFileSheet extends JournalPageSheet {
     const canPropose = doc.testUserPermission(game.user, "OBSERVER");
     const proposals = doc.getFlag("coc-case-files", "proposals") || {};
 
-    const fields = [
-      { key: "appearance.height", label: game.i18n.localize("COC-CASE-FILES.Height"), value: doc.system.appearance?.height || "", proposal: proposals["appearance.height"] },
-      { key: "appearance.build", label: game.i18n.localize("COC-CASE-FILES.Build"), value: doc.system.appearance?.build || "", proposal: proposals["appearance.build"] },
-      { key: "appearance.hair", label: game.i18n.localize("COC-CASE-FILES.Hair"), value: doc.system.appearance?.hair || "", proposal: proposals["appearance.hair"] },
-      { key: "appearance.eyes", label: game.i18n.localize("COC-CASE-FILES.Eyes"), value: doc.system.appearance?.eyes || "", proposal: proposals["appearance.eyes"] },
-      { key: "appearance.marks", label: game.i18n.localize("COC-CASE-FILES.Marks"), value: doc.system.appearance?.marks || "", proposal: proposals["appearance.marks"] },
-      { key: "address", label: game.i18n.localize("COC-CASE-FILES.Address"), value: doc.system.address || "", proposal: proposals["address"] }
+    // List of all trackable dossier fields
+    const fieldDefinitions = [
+      { key: "fullName", label: game.i18n.localize("COC-CASE-FILES.FullName"), value: doc.system.fullName || "" },
+      { key: "alias", label: game.i18n.localize("COC-CASE-FILES.Alias"), value: doc.system.alias || "" },
+      { key: "gender", label: game.i18n.localize("COC-CASE-FILES.Gender"), value: doc.system.gender || "" },
+      { key: "appearance.height", label: game.i18n.localize("COC-CASE-FILES.Height"), value: doc.system.appearance?.height || "" },
+      { key: "appearance.build", label: game.i18n.localize("COC-CASE-FILES.Build"), value: doc.system.appearance?.build || "" },
+      { key: "appearance.hair", label: game.i18n.localize("COC-CASE-FILES.Hair"), value: doc.system.appearance?.hair || "" },
+      { key: "appearance.eyes", label: game.i18n.localize("COC-CASE-FILES.Eyes"), value: doc.system.appearance?.eyes || "" },
+      { key: "appearance.marks", label: game.i18n.localize("COC-CASE-FILES.Marks"), value: doc.system.appearance?.marks || "" },
+      { key: "address", label: game.i18n.localize("COC-CASE-FILES.Address"), value: doc.system.address || "" }
     ];
+
+    // Build field structures with lock status
+    const fields = fieldDefinitions.map(f => {
+      const val = f.value.trim();
+      const isLocked = Boolean(val); // Non-empty fields are confirmed and locked
+      return {
+        key: f.key,
+        label: f.label,
+        value: val,
+        isLocked: isLocked,
+        proposal: proposals[f.key] || null
+      };
+    });
 
     context.isGM = isGM;
     context.canPropose = canPropose;
@@ -58,7 +75,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
 
     const root = html[0] || html;
 
-    // Player proposals listener
+    // Player proposals listener (only active on un-locked fields)
     const inputs = root.querySelectorAll ? root.querySelectorAll(".player-propose") : $(root).find(".player-propose");
     inputs.forEach?.(input => {
       const handler = async (ev) => {
@@ -66,6 +83,14 @@ export class PersonnelFileSheet extends JournalPageSheet {
         const val = input.value.trim();
         if (val) {
           const field = input.dataset.field;
+          
+          // Verify field is not already locked/confirmed
+          const currentVal = foundry.utils.getProperty(this.document.system, field);
+          if (currentVal && currentVal.trim()) {
+            ui.notifications.warn("This field is already confirmed and locked.");
+            return;
+          }
+
           const proposals = foundry.utils.deepClone(this.document.getFlag("coc-case-files", "proposals") || {});
           proposals[field] = val;
           await this.document.setFlag("coc-case-files", "proposals", proposals);
@@ -87,15 +112,20 @@ export class PersonnelFileSheet extends JournalPageSheet {
         if (val !== undefined) {
           const updateData = {};
           updateData[`system.${field}`] = val;
+          
+          // 1. Update core system data (locks the field)
           await this.document.update(updateData);
 
+          // 2. Remove proposal from flags
           delete proposals[field];
           await this.document.setFlag("coc-case-files", "proposals", proposals);
 
+          // 3. Award Victory/Chaos Point if module active
           if (game.modules.get("coc-victory-points")?.active) {
             game.modules.get("coc-victory-points").api?.addPoints?.(1);
           }
 
+          // 4. Chat notification
           ChatMessage.create({
             content: game.i18n.format("COC-CASE-FILES.ApprovedMessage", { field }),
             whisper: ChatMessage.getWhisperRecipients("GM")
