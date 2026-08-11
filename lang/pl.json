@@ -23,7 +23,9 @@
   },
   "TYPES": {
     "JournalEntryPage": {
-      "personnel-file": "Akta Osobowe"
+      "coc-case-files": {
+        "personnel-file": "Akta Osobowe"
+      }
     }
   }
 }

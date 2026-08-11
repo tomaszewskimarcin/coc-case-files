@@ -23,7 +23,9 @@
   },
   "TYPES": {
     "JournalEntryPage": {
-      "personnel-file": "Personnel File"
+      "coc-case-files": {
+        "personnel-file": "Personnel File"
+      }
     }
   }
 }
