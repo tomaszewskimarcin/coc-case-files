@@ -18,7 +18,7 @@
     "Marks": "Znaki szczególne",
     "Address": "Adres zamieszkania",
     "Description": "Notatki ze sprawy i uzasadnienie",
-    "ProposeDetail": "Wpisz aby zaproponować...",
+    "ProposeDetail": "Wpisz wersję roboczą...",
     "ProposedValue": "Propozycja gracza:",
     "Approve": "Zatwierdź",
     "Reject": "Odrzuć",
@@ -29,7 +29,11 @@
     "ProposalSubmitted": "Propozycja została wysłana do Mistrza Gry.",
     "ProposalReceived": "Otrzymano nową propozycję do akt '{name}'.",
     "ProposalRejected": "Propozycja została odrzucona.",
-    "FieldLockedWarn": "Ta rubryka została już zablokowana i zatwierdzona."
+    "FieldLockedWarn": "Ta rubryka została już zablokowana i zatwierdzona.",
+    "SubmitProposal": "Wyślij do GM",
+    "PendingProposal": "Zgłoszona propozycja:",
+    "PendingStatus": "(Oczekuje na weryfikację GM)",
+    "UnassignedRole": "Rola Nieustalona"
   },
   "TYPES": {
     "JournalEntryPage": {

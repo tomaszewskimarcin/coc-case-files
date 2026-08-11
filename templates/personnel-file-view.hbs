@@ -16,11 +16,49 @@
             <h1>{{#if document.system.fullName}}{{document.system.fullName}}{{else}}{{document.name}}{{/if}}</h1>
         </div>
 
-        {{#if document.system.role}}
-        <div class="role-stamp role-{{document.system.role}}">
-            {{lookup roles document.system.role}}
+        {{!-- Role Display & Role Proposal --}}
+        <div class="role-wrapper">
+            {{#if document.system.role}}
+                <div class="role-stamp role-{{document.system.role}}">
+                    {{lookup roles document.system.role}}
+                </div>
+            {{else}}
+                {{#if roleProposal}}
+                    <div class="pending-role-stamp">
+                        <span class="pending-role-title"><i class="fas fa-hourglass-half"></i> {{localize "COC-CASE-FILES.PendingProposal"}} <strong>{{lookup roles roleProposal}}</strong></span>
+                        <span class="pending-status">{{localize "COC-CASE-FILES.PendingStatus"}}</span>
+                        {{#if isGM}}
+                        <div class="proposal-actions inline-actions">
+                            <button type="button" class="approve-btn" data-action="approve-proposal" data-field="role" title="{{localize 'COC-CASE-FILES.Approve'}}">
+                                <i class="fas fa-check"></i> {{localize 'COC-CASE-FILES.Approve'}}
+                            </button>
+                            <button type="button" class="reject-btn" data-action="reject-proposal" data-field="role" title="{{localize 'COC-CASE-FILES.Reject'}}">
+                                <i class="fas fa-times"></i> {{localize 'COC-CASE-FILES.Reject'}}
+                            </button>
+                        </div>
+                        {{/if}}
+                    </div>
+                {{else}}
+                    {{#if canPropose}}
+                        <div class="role-propose-box">
+                            <select class="role-draft-select" data-field="role">
+                                <option value="" disabled selected>-- {{localize "COC-CASE-FILES.Role"}} --</option>
+                                <option value="suspect">{{localize "COC-CASE-FILES.Roles.suspect"}}</option>
+                                <option value="witness">{{localize "COC-CASE-FILES.Roles.witness"}}</option>
+                                <option value="victim">{{localize "COC-CASE-FILES.Roles.victim"}}</option>
+                            </select>
+                            <button type="button" class="submit-role-proposal-btn" data-action="submit-role-proposal">
+                                <i class="fas fa-paper-plane"></i> {{localize "COC-CASE-FILES.SubmitProposal"}}
+                            </button>
+                        </div>
+                    {{else}}
+                        <div class="role-stamp unassigned-stamp">
+                            {{localize "COC-CASE-FILES.UnassignedRole"}}
+                        </div>
+                    {{/if}}
+                {{/if}}
+            {{/if}}
         </div>
-        {{/if}}
     </div>
 
     <section class="dossier-grid">
@@ -29,33 +67,43 @@
             <span class="field-label">{{field.label}}:</span>
             <div class="field-value-wrapper">
                 {{#if field.isLocked}}
+                    {{!-- Confirmed and Locked Value --}}
                     <span class="value confirmed-value">
                         {{field.value}}
                         <i class="fas fa-lock locked-badge" title="{{localize 'COC-CASE-FILES.LockedField'}}"></i>
                     </span>
                 {{else}}
-                    {{#if ../canPropose}}
-                        <div class="propose-input-group">
-                            <input type="text" class="player-propose" data-field="{{field.key}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+                    {{#if field.proposal}}
+                        {{!-- Proposal Pending Review --}}
+                        <div class="player-pending-box">
+                            <span class="pending-text">
+                                <i class="fas fa-hourglass-half"></i> <strong>{{localize "COC-CASE-FILES.PendingProposal"}}</strong> "{{field.proposal}}"
+                                <span class="pending-status">{{localize "COC-CASE-FILES.PendingStatus"}}</span>
+                            </span>
+
+                            {{#if ../isGM}}
+                            <div class="proposal-actions">
+                                <button type="button" class="approve-btn" data-action="approve-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Approve'}}">
+                                    <i class="fas fa-check"></i> {{localize 'COC-CASE-FILES.Approve'}}
+                                </button>
+                                <button type="button" class="reject-btn" data-action="reject-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Reject'}}">
+                                    <i class="fas fa-times"></i> {{localize 'COC-CASE-FILES.Reject'}}
+                                </button>
+                            </div>
+                            {{/if}}
                         </div>
                     {{else}}
-                        <span class="value unconfirmed-placeholder">------- [BRAK DANYCH] -------</span>
-                    {{/if}}
-                {{/if}}
-
-                {{#if ../isGM}}
-                    {{#if field.proposal}}
-                    <div class="proposal-alert">
-                        <span class="proposal-text"><strong>{{localize 'COC-CASE-FILES.ProposedValue'}}</strong> "{{field.proposal}}"</span>
-                        <div class="proposal-actions">
-                            <button type="button" class="approve-btn" data-action="approve-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Approve'}}">
-                                <i class="fas fa-check"></i> {{localize 'COC-CASE-FILES.Approve'}}
-                            </button>
-                            <button type="button" class="reject-btn" data-action="reject-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.Reject'}}">
-                                <i class="fas fa-times"></i> {{localize 'COC-CASE-FILES.Reject'}}
-                            </button>
-                        </div>
-                    </div>
+                        {{#if ../canPropose}}
+                            {{!-- Player Draft Input with explicit Submit Proposal Button --}}
+                            <div class="propose-draft-group">
+                                <input type="text" class="player-draft-input" data-field="{{field.key}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+                                <button type="button" class="submit-proposal-btn" data-action="submit-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.SubmitProposal'}}">
+                                    <i class="fas fa-paper-plane"></i> {{localize "COC-CASE-FILES.SubmitProposal"}}
+                                </button>
+                            </div>
+                        {{else}}
+                            <span class="value unconfirmed-placeholder">------- [BRAK DANYCH] -------</span>
+                        {{/if}}
                     {{/if}}
                 {{/if}}
             </div>

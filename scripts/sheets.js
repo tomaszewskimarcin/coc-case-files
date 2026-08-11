@@ -48,7 +48,6 @@ export class PersonnelFileSheet extends JournalPageSheet {
         label: f.label,
         value: val,
         isLocked: isLocked,
-        // If locked, proposal box must NEVER be shown
         proposal: isLocked ? null : rawProp
       };
     });
@@ -56,6 +55,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
     context.isGM = isGM;
     context.canPropose = canPropose;
     context.fields = fields;
+    context.roleProposal = proposals.role || null;
 
     if (this.isEditable) {
       context.editorContent = doc.system.description || "";
@@ -75,41 +75,56 @@ export class PersonnelFileSheet extends JournalPageSheet {
 
     const root = html[0] || html;
 
-    // Player proposal input listener
-    const inputs = root.querySelectorAll ? root.querySelectorAll(".player-propose") : $(root).find(".player-propose");
-    inputs.forEach?.(input => {
-      const handler = async (ev) => {
-        if (ev.type === "keydown" && ev.key !== "Enter") return;
-        const val = input.value.trim();
+    // Helper to send proposal (direct setFlag for Owner/GM, socket for non-Owner Observers)
+    const sendProposal = async (field, val) => {
+      // Verify field is not already locked/confirmed
+      const currentVal = foundry.utils.getProperty(this.document.system, field);
+      if (currentVal && currentVal.trim()) {
+        ui.notifications.warn(game.i18n.localize("COC-CASE-FILES.FieldLockedWarn"));
+        return;
+      }
+
+      if (this.document.isOwner || game.user.isGM) {
+        await this.document.setFlag("coc-case-files", `proposals.${field}`, val);
+      } else {
+        game.socket.emit("module.coc-case-files", {
+          action: "propose",
+          pageUuid: this.document.uuid,
+          field: field,
+          value: val
+        });
+      }
+
+      ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalSubmitted"));
+      this.render(false);
+    };
+
+    // Explicit Submit Proposal Button Listener (Draft workflow)
+    const submitBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='submit-proposal']") : $(root).find("[data-action='submit-proposal']");
+    submitBtns.forEach?.(btn => {
+      btn.addEventListener("click", async () => {
+        const field = btn.dataset.field;
+        const row = btn.closest(".dossier-field-row");
+        const input = row?.querySelector(".player-draft-input");
+        const val = input?.value.trim();
+
         if (val) {
-          const field = input.dataset.field;
-
-          // Verify field is not already locked/confirmed
-          const currentVal = foundry.utils.getProperty(this.document.system, field);
-          if (currentVal && currentVal.trim()) {
-            ui.notifications.warn(game.i18n.localize("COC-CASE-FILES.FieldLockedWarn"));
-            return;
-          }
-
-          if (this.document.isOwner || game.user.isGM) {
-            // Direct flag write using setFlag dot-notation
-            await this.document.setFlag("coc-case-files", `proposals.${field}`, val);
-          } else {
-            // Socket emission for non-Owner Observers
-            game.socket.emit("module.coc-case-files", {
-              action: "propose",
-              pageUuid: this.document.uuid,
-              field: field,
-              value: val
-            });
-          }
-
-          ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalSubmitted"));
-          input.value = "";
+          await sendProposal(field, val);
         }
-      };
-      input.addEventListener("keydown", handler);
-      input.addEventListener("blur", handler);
+      });
+    });
+
+    // Explicit Submit Role Proposal Listener
+    const submitRoleBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='submit-role-proposal']") : $(root).find("[data-action='submit-role-proposal']");
+    submitRoleBtns.forEach?.(btn => {
+      btn.addEventListener("click", async () => {
+        const select = root.querySelector(".role-draft-select");
+        const val = select?.value;
+
+        if (val) {
+          await sendProposal("role", val);
+        }
+      });
     });
 
     // GM Approve button listener
@@ -155,10 +170,10 @@ export class PersonnelFileSheet extends JournalPageSheet {
     rejectBtns.forEach?.(btn => {
       btn.addEventListener("click", async () => {
         const field = btn.dataset.field;
-        
+
         // Properly UNSET the flag in database
         await this.document.unsetFlag("coc-case-files", `proposals.${field}`);
-        
+
         ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
 
         // In-place re-render

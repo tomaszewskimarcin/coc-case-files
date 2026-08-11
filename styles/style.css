@@ -114,6 +114,38 @@
   background: rgba(39, 138, 72, 0.08);
 }
 
+.journal-entry-page.personnel-file .unassigned-stamp {
+  color: #7f7563;
+  border-color: #7f7563;
+  font-style: italic;
+}
+
+/* Role Propose Box for Players */
+.journal-entry-page.personnel-file .role-propose-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.journal-entry-page.personnel-file select.role-draft-select {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #7f7563;
+  border-radius: 2px;
+  font-family: 'Courier Prime', monospace;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.journal-entry-page.personnel-file .pending-role-stamp {
+  background: #fff4d8;
+  border: 1px dashed #d35400;
+  padding: 6px 12px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 /* Dossier Grid Fields */
 .journal-entry-page.personnel-file .dossier-grid {
   display: flex;
@@ -158,42 +190,81 @@
   font-style: italic;
 }
 
-/* Player Propose Input */
-.journal-entry-page.personnel-file input.player-propose {
-  background: rgba(255, 255, 255, 0.6);
+/* Draft Propose Input & Submit Button */
+.journal-entry-page.personnel-file .propose-draft-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.journal-entry-page.personnel-file input.player-draft-input {
+  background: rgba(255, 255, 255, 0.7);
   border: 1px solid #7f7563;
   border-radius: 2px;
   font-family: 'Courier Prime', monospace;
   padding: 4px 8px;
-  width: 100%;
+  flex-grow: 1;
   font-size: 13px;
   color: #222;
 }
 
-.journal-entry-page.personnel-file input.player-propose:focus {
+.journal-entry-page.personnel-file input.player-draft-input:focus {
   outline: none;
   background: #fff;
   border-color: #222;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
-/* GM Proposal Alert Box */
-.journal-entry-page.personnel-file .proposal-alert {
-  margin-top: 6px;
-  background: #fff4d8;
+.journal-entry-page.personnel-file button.submit-proposal-btn,
+.journal-entry-page.personnel-file button.submit-role-proposal-btn {
+  background: #2980b9;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  font-family: sans-serif;
+  transition: background 0.2s;
+}
+
+.journal-entry-page.personnel-file button.submit-proposal-btn:hover,
+.journal-entry-page.personnel-file button.submit-role-proposal-btn:hover {
+  background: #1f6391;
+}
+
+/* Player & GM Pending Proposal Box */
+.journal-entry-page.personnel-file .player-pending-box {
+  background: #fff6e5;
+  border: 1px dashed #d35400;
   border-left: 4px solid #d35400;
-  padding: 6px 12px;
-  border-radius: 2px;
+  padding: 8px 12px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.journal-entry-page.personnel-file .pending-text {
+  color: #8e44ad;
+}
+
+.journal-entry-page.personnel-file .pending-status {
+  font-size: 11px;
+  color: #d35400;
+  font-style: italic;
+  margin-left: 6px;
 }
 
 .journal-entry-page.personnel-file .proposal-actions {
   display: flex;
   gap: 8px;
+}
+
+.journal-entry-page.personnel-file .proposal-actions.inline-actions {
+  margin-top: 5px;
 }
 
 .journal-entry-page.personnel-file .approve-btn {
@@ -204,6 +275,7 @@
   border-radius: 3px;
   cursor: pointer;
   font-size: 12px;
+  font-family: sans-serif;
 }
 
 .journal-entry-page.personnel-file .approve-btn:hover {
@@ -218,6 +290,7 @@
   border-radius: 3px;
   cursor: pointer;
   font-size: 12px;
+  font-family: sans-serif;
 }
 
 .journal-entry-page.personnel-file .reject-btn:hover {

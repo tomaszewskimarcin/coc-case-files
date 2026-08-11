@@ -18,7 +18,7 @@
     "Marks": "Distinguishing Marks",
     "Address": "Address",
     "Description": "Case Notes & File Summary",
-    "ProposeDetail": "Type to propose information...",
+    "ProposeDetail": "Type draft findings...",
     "ProposedValue": "Proposed by player:",
     "Approve": "Approve",
     "Reject": "Reject",
@@ -29,7 +29,11 @@
     "ProposalSubmitted": "Proposal submitted to the GM.",
     "ProposalReceived": "Received a new proposal for file '{name}'.",
     "ProposalRejected": "Proposal rejected.",
-    "FieldLockedWarn": "This field is already confirmed and locked."
+    "FieldLockedWarn": "This field is already confirmed and locked.",
+    "SubmitProposal": "Send to GM",
+    "PendingProposal": "Pending Proposal:",
+    "PendingStatus": "(Awaiting GM Verification)",
+    "UnassignedRole": "Unassigned Role"
   },
   "TYPES": {
     "JournalEntryPage": {
