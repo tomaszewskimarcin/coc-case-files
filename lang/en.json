@@ -33,7 +33,7 @@
     "SubmitProposal": "Send to GM",
     "PendingProposal": "Pending Proposal:",
     "PendingStatus": "(Awaiting GM Verification)",
-    "UnassignedRole": "Unassigned Role"
+    "UnassignedRole": "-- Unassigned --"
   },
   "TYPES": {
     "JournalEntryPage": {

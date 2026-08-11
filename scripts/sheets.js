@@ -17,6 +17,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
   async getData(options = {}) {
     const context = await super.getData(options);
     context.roles = {
+      "": game.i18n.localize("COC-CASE-FILES.UnassignedRole"),
       suspect: game.i18n.localize("COC-CASE-FILES.Roles.suspect"),
       witness: game.i18n.localize("COC-CASE-FILES.Roles.witness"),
       victim: game.i18n.localize("COC-CASE-FILES.Roles.victim")

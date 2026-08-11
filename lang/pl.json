@@ -33,7 +33,7 @@
     "SubmitProposal": "Wyślij do GM",
     "PendingProposal": "Zgłoszona propozycja:",
     "PendingStatus": "(Oczekuje na weryfikację GM)",
-    "UnassignedRole": "Rola Nieustalona"
+    "UnassignedRole": "-- Nieustalona --"
   },
   "TYPES": {
     "JournalEntryPage": {
