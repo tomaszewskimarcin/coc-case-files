@@ -2,7 +2,7 @@
   "id": "coc-case-files",
   "title": "Call of Cthulhu Case Files",
   "description": "Custom, interactive Journal Entry templates (starting with a 'Personnel File') designed for a 1990s Polish Police investigation setting, featuring player proposal mechanics.",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

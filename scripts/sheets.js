@@ -13,6 +13,13 @@ export class PersonnelFileSheet extends JournalPageSheet {
     return "modules/coc-case-files/templates/personnel-file-view.hbs";
   }
 
+  /**
+   * Helper to get a unique storage key for per-user local draft inputs.
+   */
+  #getDraftStorageKey(fieldKey) {
+    return `coc-case-files-draft-${this.document.id}-${game.user.id}-${fieldKey}`;
+  }
+
   /** @override */
   async getData(options = {}) {
     const context = await super.getData(options);
@@ -44,12 +51,15 @@ export class PersonnelFileSheet extends JournalPageSheet {
       const val = f.value.trim();
       const isLocked = Boolean(val);
       const rawProp = foundry.utils.getProperty(proposals, f.key) || proposals[f.key] || null;
+      const draftVal = localStorage.getItem(this.#getDraftStorageKey(f.key)) || "";
+
       return {
         key: f.key,
         label: f.label,
         value: val,
         isLocked: isLocked,
-        proposal: isLocked ? null : rawProp
+        proposal: isLocked ? null : rawProp,
+        draft: draftVal
       };
     });
 
@@ -57,6 +67,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
     context.canPropose = canPropose;
     context.fields = fields;
     context.roleProposal = proposals.role || null;
+    context.roleDraft = localStorage.getItem(this.#getDraftStorageKey("role")) || "";
 
     if (this.isEditable) {
       context.editorContent = doc.system.description || "";
@@ -76,9 +87,8 @@ export class PersonnelFileSheet extends JournalPageSheet {
 
     const root = html[0] || html;
 
-    // Helper to send proposal (direct setFlag for Owner/GM, socket for non-Owner Observers)
+    // Helper to send proposal and clear local draft
     const sendProposal = async (field, val) => {
-      // Verify field is not already locked/confirmed
       const currentVal = foundry.utils.getProperty(this.document.system, field);
       if (currentVal && currentVal.trim()) {
         ui.notifications.warn(game.i18n.localize("COC-CASE-FILES.FieldLockedWarn"));
@@ -96,9 +106,31 @@ export class PersonnelFileSheet extends JournalPageSheet {
         });
       }
 
+      // Clear local persisted draft after sending
+      localStorage.removeItem(this.#getDraftStorageKey(field));
+
       ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalSubmitted"));
       this.render(false);
     };
+
+    // Auto-save player draft to localStorage as they type or select
+    const draftInputs = root.querySelectorAll ? root.querySelectorAll(".player-draft-input") : $(root).find(".player-draft-input");
+    draftInputs.forEach?.(input => {
+      input.addEventListener("input", () => {
+        const field = input.dataset.field;
+        if (field) {
+          localStorage.setItem(this.#getDraftStorageKey(field), input.value);
+        }
+      });
+    });
+
+    // Auto-save role draft to localStorage
+    const roleSelect = root.querySelector ? root.querySelector(".role-draft-select") : $(root).find(".role-draft-select")[0];
+    roleSelect?.addEventListener("change", () => {
+      if (roleSelect.value) {
+        localStorage.setItem(this.#getDraftStorageKey("role"), roleSelect.value);
+      }
+    });
 
     // Explicit Submit Proposal Button Listener (Draft workflow)
     const submitBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='submit-proposal']") : $(root).find("[data-action='submit-proposal']");

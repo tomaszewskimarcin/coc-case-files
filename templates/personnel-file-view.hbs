@@ -42,10 +42,10 @@
                     {{#if canPropose}}
                         <div class="role-propose-box">
                             <select class="role-draft-select" data-field="role">
-                                <option value="" disabled selected>-- {{localize "COC-CASE-FILES.Role"}} --</option>
-                                <option value="suspect">{{localize "COC-CASE-FILES.Roles.suspect"}}</option>
-                                <option value="witness">{{localize "COC-CASE-FILES.Roles.witness"}}</option>
-                                <option value="victim">{{localize "COC-CASE-FILES.Roles.victim"}}</option>
+                                <option value="" disabled {{#unless roleDraft}}selected{{/unless}}>-- {{localize "COC-CASE-FILES.Role"}} --</option>
+                                <option value="suspect" {{#if (eq roleDraft "suspect")}}selected{{/if}}>{{localize "COC-CASE-FILES.Roles.suspect"}}</option>
+                                <option value="witness" {{#if (eq roleDraft "witness")}}selected{{/if}}>{{localize "COC-CASE-FILES.Roles.witness"}}</option>
+                                <option value="victim" {{#if (eq roleDraft "victim")}}selected{{/if}}>{{localize "COC-CASE-FILES.Roles.victim"}}</option>
                             </select>
                             <button type="button" class="submit-role-proposal-btn" data-action="submit-role-proposal">
                                 <i class="fas fa-paper-plane"></i> {{localize "COC-CASE-FILES.SubmitProposal"}}
@@ -94,9 +94,9 @@
                         </div>
                     {{else}}
                         {{#if ../canPropose}}
-                            {{!-- Player Draft Input with explicit Submit Proposal Button --}}
+                            {{!-- Player Draft Input with explicit Submit Proposal Button & persisted draft --}}
                             <div class="propose-draft-group">
-                                <input type="text" class="player-draft-input" data-field="{{field.key}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+                                <input type="text" class="player-draft-input" data-field="{{field.key}}" value="{{field.draft}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
                                 <button type="button" class="submit-proposal-btn" data-action="submit-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.SubmitProposal'}}">
                                     <i class="fas fa-paper-plane"></i> {{localize "COC-CASE-FILES.SubmitProposal"}}
                                 </button>
