@@ -24,10 +24,10 @@ export class PersonnelFileSheet extends JournalPageSheet {
 
     const doc = this.document;
     const isGM = game.user.isGM;
+    // Allow users with Observer or higher permissions to propose edits
     const canPropose = doc.testUserPermission(game.user, "OBSERVER");
     const proposals = doc.getFlag("coc-case-files", "proposals") || {};
 
-    // List of all trackable dossier fields
     const fieldDefinitions = [
       { key: "fullName", label: game.i18n.localize("COC-CASE-FILES.FullName"), value: doc.system.fullName || "" },
       { key: "alias", label: game.i18n.localize("COC-CASE-FILES.Alias"), value: doc.system.alias || "" },
@@ -40,10 +40,9 @@ export class PersonnelFileSheet extends JournalPageSheet {
       { key: "address", label: game.i18n.localize("COC-CASE-FILES.Address"), value: doc.system.address || "" }
     ];
 
-    // Build field structures with lock status
     const fields = fieldDefinitions.map(f => {
       const val = f.value.trim();
-      const isLocked = Boolean(val); // Non-empty fields are confirmed and locked
+      const isLocked = Boolean(val);
       return {
         key: f.key,
         label: f.label,
@@ -75,7 +74,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
 
     const root = html[0] || html;
 
-    // Player proposals listener (only active on un-locked fields)
+    // Player proposal input listener
     const inputs = root.querySelectorAll ? root.querySelectorAll(".player-propose") : $(root).find(".player-propose");
     inputs.forEach?.(input => {
       const handler = async (ev) => {
@@ -83,18 +82,31 @@ export class PersonnelFileSheet extends JournalPageSheet {
         const val = input.value.trim();
         if (val) {
           const field = input.dataset.field;
-          
+
           // Verify field is not already locked/confirmed
           const currentVal = foundry.utils.getProperty(this.document.system, field);
           if (currentVal && currentVal.trim()) {
-            ui.notifications.warn("This field is already confirmed and locked.");
+            ui.notifications.warn("Ta rubryka została już zablokowana i zatwierdzona.");
             return;
           }
 
-          const proposals = foundry.utils.deepClone(this.document.getFlag("coc-case-files", "proposals") || {});
-          proposals[field] = val;
-          await this.document.setFlag("coc-case-files", "proposals", proposals);
-          ui.notifications.info("Proposal submitted to the GM.");
+          if (this.document.isOwner || game.user.isGM) {
+            // Direct flag write for Owners / GM
+            const proposals = foundry.utils.deepClone(this.document.getFlag("coc-case-files", "proposals") || {});
+            proposals[field] = val;
+            await this.document.setFlag("coc-case-files", "proposals", proposals);
+          } else {
+            // Socket emission for non-Owner Observers
+            game.socket.emit("module.coc-case-files", {
+              action: "propose",
+              pageId: this.document.id,
+              field: field,
+              value: val
+            });
+          }
+
+          ui.notifications.info("Propozycja została wysłana do Mistrza Gry.");
+          input.value = "";
         }
       };
       input.addEventListener("keydown", handler);
@@ -112,24 +124,27 @@ export class PersonnelFileSheet extends JournalPageSheet {
         if (val !== undefined) {
           const updateData = {};
           updateData[`system.${field}`] = val;
-          
-          // 1. Update core system data (locks the field)
+
+          // 1. Save directly to system data
           await this.document.update(updateData);
 
-          // 2. Remove proposal from flags
+          // 2. Clear proposal flag
           delete proposals[field];
           await this.document.setFlag("coc-case-files", "proposals", proposals);
 
-          // 3. Award Victory/Chaos Point if module active
+          // 3. Award point if coc-victory-points is active
           if (game.modules.get("coc-victory-points")?.active) {
             game.modules.get("coc-victory-points").api?.addPoints?.(1);
           }
 
-          // 4. Chat notification
+          // 4. Chat announcement
           ChatMessage.create({
             content: game.i18n.format("COC-CASE-FILES.ApprovedMessage", { field }),
             whisper: ChatMessage.getWhisperRecipients("GM")
           });
+
+          // 5. Force immediate re-render to hide proposal box instantly
+          this.render(true);
         }
       });
     });
@@ -144,7 +159,10 @@ export class PersonnelFileSheet extends JournalPageSheet {
         if (proposals[field] !== undefined) {
           delete proposals[field];
           await this.document.setFlag("coc-case-files", "proposals", proposals);
-          ui.notifications.info("Proposal rejected.");
+          ui.notifications.info("Propozycja została odrzucona.");
+
+          // Force immediate re-render to hide proposal box instantly
+          this.render(true);
         }
       });
     });
