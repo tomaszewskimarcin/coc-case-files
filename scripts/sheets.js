@@ -52,12 +52,24 @@ export class PersonnelFileSheet extends JournalPageSheet {
       context.watermark = "ZASTRZEŻONE";
       context.footerLeft = "POLICJA RZECZYPOSPOLITEJ POLSKIEJ - SYSTEM KIP";
       context.footerRight = "FORM-POL-2024";
-    } else if (theme === "uniwersalny") {
-      context.headerTop = "DOSSIER / CASE FILE RECORD";
-      context.headerSub = "CONFIDENTIAL REGISTRATION FORM";
+    } else if (theme === "uniwersalny-20lecie") {
+      context.headerTop = "DOSSIER / INVESTIGATION RECORD";
+      context.headerSub = "CONFIDENTIAL RECORD - 1920s BUREAU";
       context.watermark = "CONFIDENTIAL";
-      context.footerLeft = "GENERAL INVESTIGATION BUREAU - CASE FILE";
-      context.footerRight = "FORM-GEN-01";
+      context.footerLeft = "BUREAU OF INVESTIGATION - RECORDS";
+      context.footerRight = "FORM-1924-A";
+    } else if (theme === "uniwersalny-dzis") {
+      context.headerTop = "DIGITAL CASE FILE / DOSSIER";
+      context.headerSub = "RESTRICTED ACCESS - CENTRAL RECORDS";
+      context.watermark = "CLASSIFIED";
+      context.footerLeft = "CENTRAL POLICE RECORDS - DATABASE SYSTEM";
+      context.footerRight = "FORM-2024-SYS";
+    } else if (theme === "uniwersalny-80-90") {
+      context.headerTop = "CASE FILE / DOSSIER";
+      context.headerSub = "CONFIDENTIAL RECORD - DEPT OF POLICE";
+      context.watermark = "RESTRICTED";
+      context.footerLeft = "DEPARTMENT OF POLICE - RECORDS DIVISION";
+      context.footerRight = "FORM-80-REC";
     } else {
       // Default polska-80-90
       context.headerTop = game.i18n.localize("COC-CASE-FILES.HeaderTop");

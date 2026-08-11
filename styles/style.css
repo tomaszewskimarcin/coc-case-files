@@ -105,23 +105,80 @@
 }
 
 /* ==========================================================================
-   THEME 4: Uniwersalny / Klasyczny (Lata 20, 80, Współczesność)
+   THEME 4: Uniwersalny: Lata 20. (Klasyczne Dossier 1920s)
    ========================================================================== */
-.journal-entry-page.personnel-file.theme-uniwersalny {
+.journal-entry-page.personnel-file.theme-uniwersalny-20lecie {
+  background-color: #f5f0eb;
+  color: #1c1917;
+  font-family: "Times New Roman", "Georgia", serif;
+  border: 3px double #292524;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.08);
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-20lecie .police-header {
+  border-bottom: 3px double #292524;
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-20lecie .watermark-stamp {
+  color: #292524;
+  border: 3px double #292524;
+  font-family: "Times New Roman", serif;
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-20lecie .dossier-field-row {
+  border-bottom: 1px solid #d6d3d1;
+}
+
+/* ==========================================================================
+   THEME 5: Uniwersalny: Lata 80. i 90. (Druk Maszynowy)
+   ========================================================================== */
+.journal-entry-page.personnel-file.theme-uniwersalny-80-90 {
   background-color: #f9f9f9;
   color: #111111;
-  font-family: "Consolas", "Courier New", monospace;
+  font-family: 'Courier Prime', "Consolas", "Courier New", monospace;
   border: 2px solid #333333;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.journal-entry-page.personnel-file.theme-uniwersalny .police-header {
+.journal-entry-page.personnel-file.theme-uniwersalny-80-90 .police-header {
   border-bottom: 2px solid #111111;
 }
 
-.journal-entry-page.personnel-file.theme-uniwersalny .watermark-stamp {
+.journal-entry-page.personnel-file.theme-uniwersalny-80-90 .watermark-stamp {
   color: #333333;
   border: 3px dashed #333333;
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-80-90 .dossier-field-row {
+  border-bottom: 1px dashed #666666;
+}
+
+/* ==========================================================================
+   THEME 6: Uniwersalny: Współczesny (Modern Digital Dossier)
+   ========================================================================== */
+.journal-entry-page.personnel-file.theme-uniwersalny-dzis {
+  background-color: #ffffff;
+  color: #09090b;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-dzis .police-header {
+  border-bottom: 2px solid #09090b;
+  background: #f4f4f5;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-dzis .watermark-stamp {
+  color: #09090b;
+  border: 2px solid #09090b;
+  border-radius: 4px;
+}
+
+.journal-entry-page.personnel-file.theme-uniwersalny-dzis .dossier-field-row {
+  border-bottom: 1px solid #e4e4e7;
 }
 
 /* ==========================================================================

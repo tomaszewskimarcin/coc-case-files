@@ -29,7 +29,9 @@ Hooks.once("init", () => {
       "polska-80-90": "Polska: Lata 80. i 90. (Policja / MO)",
       "polska-dzis": "Polska: Współczesna Policja",
       "polska-20lecie": "Polska: II Rzeczpospolita (Policja Państwowa 1919-1939)",
-      "uniwersalny": "Uniwersalny / Klasyczny (Lata 20, 80, Współczesność)"
+      "uniwersalny-20lecie": "Uniwersalny: Lata 20. (Klasyczne Dossier 1920s)",
+      "uniwersalny-80-90": "Uniwersalny: Lata 80. i 90. (Druk Maszynowy)",
+      "uniwersalny-dzis": "Uniwersalny: Współczesny (Modern Digital Dossier)"
     },
     default: "polska-80-90",
     onChange: () => {
