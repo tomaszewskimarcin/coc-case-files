@@ -454,15 +454,18 @@
   background: #a93226;
 }
 
-/* Notes Section */
+/* Notes Section & Player Notepad */
 .journal-entry-page.personnel-file .dossier-notes {
-  margin-top: 20px;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .journal-entry-page.personnel-file .dossier-notes h3 {
   font-size: 15px;
   font-weight: bold;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
   padding-bottom: 4px;
   margin-bottom: 10px;
 }
@@ -471,8 +474,39 @@
   background: rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(0,0,0,0.2);
   padding: 15px;
-  min-height: 100px;
+  min-height: 80px;
   border-radius: 2px;
+}
+
+.journal-entry-page.personnel-file .player-notepad-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.journal-entry-page.personnel-file textarea.player-notepad {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px dashed #7f7563;
+  border-radius: 3px;
+  padding: 12px;
+  min-height: 120px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #111;
+  resize: vertical;
+}
+
+.journal-entry-page.personnel-file textarea.player-notepad:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #222;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
+}
+
+.journal-entry-page.personnel-file .notepad-hint {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 5px;
+  font-style: italic;
 }
 
 /* Footer */

@@ -36,7 +36,11 @@
     "PendingStatus": "(Oczekuje na weryfikację GM)",
     "UnassignedRole": "-- Nieustalona --",
     "SettingThemeName": "Motyw / Szablon Epoki Akt",
-    "SettingThemeHint": "Wybierz styl wizualny i nagłówek epoki historycznej dla Akt Osobowych."
+    "SettingThemeHint": "Wybierz styl wizualny i nagłówek epoki historycznej dla Akt Osobowych.",
+    "OfficialDescription": "Oficjalne Podsumowanie Akta",
+    "PlayerNotepadTitle": "Notatnik Śledczy Gracza",
+    "PlayerNotepadPlaceholder": "Wpisz tutaj swoje prywatne notatki ze śledztwa, powiązania i hipotezy...",
+    "PlayerNotepadHint": "Automatyczny zapis w Twojej przeglądarce. Prywatny brudnopis (nie jest wysyłany do GM)."
   },
   "TYPES": {
     "JournalEntryPage": {

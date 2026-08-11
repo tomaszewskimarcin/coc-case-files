@@ -20,6 +20,13 @@ export class PersonnelFileSheet extends JournalPageSheet {
     return `coc-case-files-draft-${this.document.id}-${game.user.id}-${fieldKey}`;
   }
 
+  /**
+   * Helper to get a unique storage key for per-user local player notepad.
+   */
+  #getNotepadStorageKey() {
+    return `coc-case-files-notepad-${this.document.id}-${game.user.id}`;
+  }
+
   /** @override */
   async getData(options = {}) {
     const context = await super.getData(options);
@@ -113,6 +120,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
     context.fields = fields;
     context.roleProposal = proposals.role || null;
     context.roleDraft = localStorage.getItem(this.#getDraftStorageKey("role")) || "";
+    context.playerNotepad = localStorage.getItem(this.#getNotepadStorageKey()) || "";
 
     if (this.isEditable) {
       context.editorContent = doc.system.description || "";
@@ -131,6 +139,12 @@ export class PersonnelFileSheet extends JournalPageSheet {
     super.activateListeners(html);
 
     const root = html[0] || html;
+
+    // Player Notepad auto-save
+    const notepad = root.querySelector ? root.querySelector(".player-notepad") : $(root).find(".player-notepad")[0];
+    notepad?.addEventListener("input", () => {
+      localStorage.setItem(this.#getNotepadStorageKey(), notepad.value);
+    });
 
     // Helper to send proposal and clear local draft
     const sendProposal = async (field, val) => {

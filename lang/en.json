@@ -36,7 +36,11 @@
     "PendingStatus": "(Awaiting GM Verification)",
     "UnassignedRole": "-- Unassigned --",
     "SettingThemeName": "Dossier Era / Theme",
-    "SettingThemeHint": "Select the visual theme and historical era for Personnel Files."
+    "SettingThemeHint": "Select the visual theme and historical era for Personnel Files.",
+    "OfficialDescription": "Official Case Summary",
+    "PlayerNotepadTitle": "Player Investigation Notepad",
+    "PlayerNotepadPlaceholder": "Type your personal investigation notes, clues, and hypotheses here...",
+    "PlayerNotepadHint": "Auto-saved locally in your browser. Private scratchpad (not sent to GM)."
   },
   "TYPES": {
     "JournalEntryPage": {
