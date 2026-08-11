@@ -1,11 +1,6 @@
 <div class="journal-entry-page personnel-file">
     <header>
         <h1>{{document.name}}</h1>
-        {{#if isGM}}
-        <button type="button" data-action="toggle-edit" style="margin: 10px 0; width: 100%;">
-            <i class="fas fa-edit"></i> Switch to Edit Mode
-        </button>
-        {{/if}}
     </header>
 
     {{#if document.system.role}}
@@ -46,7 +41,7 @@
     <section class="description">
         <h3>{{localize "COC-CASE-FILES.Description"}}</h3>
         <div class="editor-content">
-            {{{document.system.description}}}
+            {{{descriptionHTML}}}
         </div>
     </section>
 </div>
