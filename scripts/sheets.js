@@ -1,4 +1,5 @@
-const { DocumentSheetV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { DocumentSheetV2 } = foundry.applications.sheets;
 
 export class PersonnelFileSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   /** @override */

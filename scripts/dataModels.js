@@ -1,7 +1,6 @@
-const { StringField, HTMLField, SchemaField } = foundry.data.fields;
-
 export class PersonnelFileDataModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
+    const { StringField, HTMLField, SchemaField } = foundry.data.fields;
     return {
       role: new StringField({ required: true, blank: true, initial: "" }),
       appearance: new SchemaField({
