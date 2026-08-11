@@ -30,13 +30,11 @@ Hooks.once("init", () => {
       const targetPage = await fromUuid(pageUuid);
 
       if (targetPage) {
-        const proposals = foundry.utils.deepClone(targetPage.getFlag("coc-case-files", "proposals") || {});
-        proposals[field] = value;
-        await targetPage.setFlag("coc-case-files", "proposals", proposals);
+        await targetPage.setFlag("coc-case-files", `proposals.${field}`, value);
         
         ui.notifications.info(game.i18n.format("COC-CASE-FILES.ProposalReceived", { name: targetPage.name }));
 
-        // Soft in-place re-render if sheet is open, without forcing edit mode
+        // Soft in-place re-render if sheet is open
         if (targetPage.sheet?.rendered) {
           targetPage.sheet.render(false);
         }

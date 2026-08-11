@@ -42,12 +42,14 @@ export class PersonnelFileSheet extends JournalPageSheet {
     const fields = fieldDefinitions.map(f => {
       const val = f.value.trim();
       const isLocked = Boolean(val);
+      const rawProp = foundry.utils.getProperty(proposals, f.key) || proposals[f.key] || null;
       return {
         key: f.key,
         label: f.label,
         value: val,
         isLocked: isLocked,
-        proposal: proposals[f.key] || null
+        // If locked, proposal box must NEVER be shown
+        proposal: isLocked ? null : rawProp
       };
     });
 
@@ -90,12 +92,10 @@ export class PersonnelFileSheet extends JournalPageSheet {
           }
 
           if (this.document.isOwner || game.user.isGM) {
-            // Direct flag write for Owners / GM
-            const proposals = foundry.utils.deepClone(this.document.getFlag("coc-case-files", "proposals") || {});
-            proposals[field] = val;
-            await this.document.setFlag("coc-case-files", "proposals", proposals);
+            // Direct flag write using setFlag dot-notation
+            await this.document.setFlag("coc-case-files", `proposals.${field}`, val);
           } else {
-            // Socket emission for non-Owner Observers (using UUID)
+            // Socket emission for non-Owner Observers
             game.socket.emit("module.coc-case-files", {
               action: "propose",
               pageUuid: this.document.uuid,
@@ -117,19 +117,18 @@ export class PersonnelFileSheet extends JournalPageSheet {
     approveBtns.forEach?.(btn => {
       btn.addEventListener("click", async () => {
         const field = btn.dataset.field;
-        const proposals = foundry.utils.deepClone(this.document.getFlag("coc-case-files", "proposals") || {});
-        const val = proposals[field];
+        const proposals = this.document.getFlag("coc-case-files", "proposals") || {};
+        const val = foundry.utils.getProperty(proposals, field) || proposals[field];
 
         if (val !== undefined) {
           const updateData = {};
           updateData[`system.${field}`] = val;
 
-          // 1. Save directly to system data
+          // 1. Save directly to system data (locks the field)
           await this.document.update(updateData);
 
-          // 2. Clear proposal flag
-          delete proposals[field];
-          await this.document.setFlag("coc-case-files", "proposals", proposals);
+          // 2. Properly UNSET the flag in database
+          await this.document.unsetFlag("coc-case-files", `proposals.${field}`);
 
           // 3. Award Chaos Point via async API call if coc-victory-points module is active
           const victoryPointsMod = game.modules.get("coc-victory-points");
@@ -145,7 +144,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
             whisper: ChatMessage.getWhisperRecipients("GM")
           });
 
-          // 5. In-place re-render without forcing edit mode
+          // 5. In-place re-render to reflect database state
           this.render(false);
         }
       });
@@ -156,16 +155,14 @@ export class PersonnelFileSheet extends JournalPageSheet {
     rejectBtns.forEach?.(btn => {
       btn.addEventListener("click", async () => {
         const field = btn.dataset.field;
-        const proposals = foundry.utils.deepClone(this.document.getFlag("coc-case-files", "proposals") || {});
+        
+        // Properly UNSET the flag in database
+        await this.document.unsetFlag("coc-case-files", `proposals.${field}`);
+        
+        ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
 
-        if (proposals[field] !== undefined) {
-          delete proposals[field];
-          await this.document.setFlag("coc-case-files", "proposals", proposals);
-          ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
-
-          // In-place re-render without forcing edit mode
-          this.render(false);
-        }
+        // In-place re-render
+        this.render(false);
       });
     });
   }
