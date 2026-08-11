@@ -12,6 +12,11 @@
       "name": "tomaszewskimarcin"
     }
   ],
+  "documentTypes": {
+    "JournalEntryPage": {
+      "personnel-file": {}
+    }
+  },
   "scripts": [
     "scripts/main.js"
   ],
