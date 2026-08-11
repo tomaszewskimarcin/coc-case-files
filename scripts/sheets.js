@@ -131,9 +131,12 @@ export class PersonnelFileSheet extends JournalPageSheet {
           delete proposals[field];
           await this.document.setFlag("coc-case-files", "proposals", proposals);
 
-          // 3. Award point if coc-victory-points is active
-          if (game.modules.get("coc-victory-points")?.active) {
-            game.modules.get("coc-victory-points").api?.addPoints?.(1);
+          // 3. Award Chaos Point via async API call if coc-victory-points module is active
+          const victoryPointsMod = game.modules.get("coc-victory-points");
+          if (victoryPointsMod?.active && victoryPointsMod.api) {
+            if (typeof victoryPointsMod.api.addPoints === "function") {
+              await victoryPointsMod.api.addPoints(1);
+            }
           }
 
           // 4. Chat announcement
@@ -142,8 +145,8 @@ export class PersonnelFileSheet extends JournalPageSheet {
             whisper: ChatMessage.getWhisperRecipients("GM")
           });
 
-          // 5. Force immediate re-render to hide proposal box instantly
-          this.render(true);
+          // 5. In-place re-render without forcing edit mode
+          this.render(false);
         }
       });
     });
@@ -160,8 +163,8 @@ export class PersonnelFileSheet extends JournalPageSheet {
           await this.document.setFlag("coc-case-files", "proposals", proposals);
           ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
 
-          // Force immediate re-render to hide proposal box instantly
-          this.render(true);
+          // In-place re-render without forcing edit mode
+          this.render(false);
         }
       });
     });

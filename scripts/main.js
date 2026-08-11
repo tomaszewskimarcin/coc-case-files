@@ -36,8 +36,10 @@ Hooks.once("init", () => {
         
         ui.notifications.info(game.i18n.format("COC-CASE-FILES.ProposalReceived", { name: targetPage.name }));
 
-        // Re-render open sheets for GM if currently visible
-        targetPage.sheet?.render(true);
+        // Soft in-place re-render if sheet is open, without forcing edit mode
+        if (targetPage.sheet?.rendered) {
+          targetPage.sheet.render(false);
+        }
       }
     }
   });
