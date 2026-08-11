@@ -4,9 +4,15 @@ export class PersonnelFileSheet extends HandlebarsApplicationMixin(DocumentSheet
   /** @override */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ["personnel-file-sheet"],
+    form: {
+      submitOnChange: true,
+      closeOnSubmit: false
+    },
     actions: {
       "approve-proposal": PersonnelFileSheet.#onApproveProposal,
-      "reject-proposal": PersonnelFileSheet.#onRejectProposal
+      "reject-proposal": PersonnelFileSheet.#onRejectProposal,
+      "toggle-view": PersonnelFileSheet.#onToggleView,
+      "toggle-edit": PersonnelFileSheet.#onToggleEdit
     }
   }, { inplace: false });
 
@@ -138,5 +144,15 @@ export class PersonnelFileSheet extends HandlebarsApplicationMixin(DocumentSheet
       await doc.setFlag("coc-case-files", "proposals", proposals);
       ui.notifications.info("Proposal rejected.");
     }
+  }
+
+  static async #onToggleView(event, target) {
+    this.options.editable = false;
+    this.render({ force: true });
+  }
+
+  static async #onToggleEdit(event, target) {
+    this.options.editable = true;
+    this.render({ force: true });
   }
 }
