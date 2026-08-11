@@ -1,4 +1,6 @@
-export class PersonnelFileSheet extends foundry.applications.api.DocumentSheetV2 {
+const { DocumentSheetV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class PersonnelFileSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ["personnel-file-sheet"],
