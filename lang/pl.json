@@ -43,11 +43,26 @@
     "PlayerNotepadHint": "Automatyczny zapis w Twojej przeglądarce. Prywatny brudnopis (nie jest wysyłany do GM).",
     "FieldsConfigMenuLabel": "Zarządzaj Polami Akt Osobowych (DEV)",
     "FieldsConfigMenuHint": "Konfiguruj widoczne pola, typy danych, opcje oraz uprawnienia zgłaszania propozycji przez graczy.",
-    "FieldsConfigTitle": "Konfigurator Pol Akt Osobowych",
+    "FieldsConfigTitle": "Konfigurator Pól Akt Osobowych",
     "FieldsConfigSubtitle": "Zarządzaj etykietami, typami danych oraz uprawnieniem graczy do wprowadzania poprawek.",
     "AddField": "Dodaj Nowe Pole",
     "SaveConfig": "Zapisz Konfigurację",
-    "SelectOption": "Wybierz opcję..."
+    "SelectOption": "Wybierz opcję...",
+    "TableHeaderLabel": "Nazwa Pola (Etykieta PL)",
+    "TableHeaderLabelEn": "Etykieta EN (Opcjonalnie)",
+    "TableHeaderType": "Typ Danych",
+    "TableHeaderOptions": "Opcje Listy (select, po przecinku)",
+    "TableHeaderProposals": "Propozycje",
+    "TableHeaderActive": "Aktywne",
+    "TableHeaderActions": "Akcje",
+    "FieldType": {
+      "text": "Tekst (Jednolinijkowy)",
+      "number": "Liczba",
+      "select": "Lista rozwijana (select)",
+      "date": "Data",
+      "textarea": "Obszar tekstowy (multiline)"
+    },
+    "CoreBadge": "Baza"
   },
   "TYPES": {
     "JournalEntryPage": {

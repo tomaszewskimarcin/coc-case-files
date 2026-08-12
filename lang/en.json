@@ -47,7 +47,22 @@
     "FieldsConfigSubtitle": "Manage field labels, data types, and player proposal rights.",
     "AddField": "Add Custom Field",
     "SaveConfig": "Save Configuration",
-    "SelectOption": "Select option..."
+    "SelectOption": "Select option...",
+    "TableHeaderLabel": "Field Name (Label PL)",
+    "TableHeaderLabelEn": "Label EN (Optional)",
+    "TableHeaderType": "Data Type",
+    "TableHeaderOptions": "Select Options (comma-separated)",
+    "TableHeaderProposals": "Proposals",
+    "TableHeaderActive": "Active",
+    "TableHeaderActions": "Actions",
+    "FieldType": {
+      "text": "Text (Single-line)",
+      "number": "Number",
+      "select": "Dropdown (select)",
+      "date": "Date",
+      "textarea": "Textarea (multiline)"
+    },
+    "CoreBadge": "Core"
   },
   "TYPES": {
     "JournalEntryPage": {

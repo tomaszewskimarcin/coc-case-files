@@ -5,16 +5,16 @@ import { getFieldsConfigApp } from "./fieldsConfigApp.js";
 export const MODULE_ID = "coc-case-files-dev";
 
 export const DEFAULT_FIELDS_CONFIG = [
-  { key: "fullName", label: "Imię i Nazwisko", type: "text", enabled: true, allowProposals: true, isCore: true, isCustom: false },
-  { key: "alias", label: "Pseudonim / Ksywa", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "gender", label: "Płeć", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "birthDate", label: "Data urodzenia", type: "date", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "appearance.height", label: "Wzrost", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "appearance.build", label: "Budowa ciała", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "appearance.hair", label: "Kolor włosów", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "appearance.eyes", label: "Kolor oczu", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "appearance.marks", label: "Znaki szczególne", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
-  { key: "address", label: "Adres zamieszkania", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false }
+  { key: "fullName", labelKey: "COC-CASE-FILES.FullName", label: "Full Name", type: "text", enabled: true, allowProposals: true, isCore: true, isCustom: false },
+  { key: "alias", labelKey: "COC-CASE-FILES.Alias", label: "Alias / Nickname", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "gender", labelKey: "COC-CASE-FILES.Gender", label: "Gender", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "birthDate", labelKey: "COC-CASE-FILES.BirthDate", label: "Date of Birth", type: "date", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.height", labelKey: "COC-CASE-FILES.Height", label: "Height", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.build", labelKey: "COC-CASE-FILES.Build", label: "Build", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.hair", labelKey: "COC-CASE-FILES.Hair", label: "Hair Color", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.eyes", labelKey: "COC-CASE-FILES.Eyes", label: "Eye Color", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.marks", labelKey: "COC-CASE-FILES.Marks", label: "Distinguishing Marks", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "address", labelKey: "COC-CASE-FILES.Address", label: "Address", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false }
 ];
 
 const typeDev = `${MODULE_ID}.personnel-file`;

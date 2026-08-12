@@ -8,28 +8,29 @@
         <table class="fields-table">
             <thead>
                 <tr>
-                    <th style="width: 26%;">Nazwa Pola (Etykieta)</th>
-                    <th style="width: 24%;">Typ Danych</th>
-                    <th style="width: 28%;">Opcje Listy (select, po przecinku)</th>
-                    <th style="width: 8%;" class="text-center" title="Czy gracze mogą zgłaszać propozycje wpisu?">Propozycje</th>
-                    <th style="width: 7%;" class="text-center" title="Czy pole jest widoczne w teczce?">Aktywne</th>
-                    <th style="width: 7%;" class="text-center">Akcje</th>
+                    <th style="width: 26%;">{{localize "COC-CASE-FILES.TableHeaderLabel"}}</th>
+                    <th style="width: 24%;">{{localize "COC-CASE-FILES.TableHeaderType"}}</th>
+                    <th style="width: 28%;">{{localize "COC-CASE-FILES.TableHeaderOptions"}}</th>
+                    <th style="width: 8%;" class="text-center" title="Propozycje graczy">{{localize "COC-CASE-FILES.TableHeaderProposals"}}</th>
+                    <th style="width: 7%;" class="text-center" title="Widoczność pola">{{localize "COC-CASE-FILES.TableHeaderActive"}}</th>
+                    <th style="width: 7%;" class="text-center">{{localize "COC-CASE-FILES.TableHeaderActions"}}</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each fields as |field index|}}
                 <tr class="field-row {{#if field.isCustom}}custom-field-row{{else}}core-field-row{{/if}}">
                     <td class="field-label-cell">
-                        <input type="text" name="fields.{{index}}.label" value="{{field.label}}" required>
+                        <input type="text" name="fields.{{index}}.label" value="{{field.displayLabel}}" required>
                         <input type="hidden" name="fields.{{index}}.key" value="{{field.key}}">
+                        {{#if field.labelKey}}<input type="hidden" name="fields.{{index}}.labelKey" value="{{field.labelKey}}">{{/if}}
                     </td>
                     <td class="field-type-cell">
                         <select name="fields.{{index}}.type" class="field-type-select" data-index="{{index}}">
-                            <option value="text" {{#if (eq field.type "text")}}selected{{/if}}>Tekst (Jednolinijkowy)</option>
-                            <option value="number" {{#if (eq field.type "number")}}selected{{/if}}>Liczba</option>
-                            <option value="select" {{#if (eq field.type "select")}}selected{{/if}}>Lista rozwijana (select)</option>
-                            <option value="date" {{#if (eq field.type "date")}}selected{{/if}}>Data</option>
-                            <option value="textarea" {{#if (eq field.type "textarea")}}selected{{/if}}>Obszar tekstowy (multiline)</option>
+                            <option value="text" {{#if (eq field.type "text")}}selected{{/if}}>{{localize "COC-CASE-FILES.FieldType.text"}}</option>
+                            <option value="number" {{#if (eq field.type "number")}}selected{{/if}}>{{localize "COC-CASE-FILES.FieldType.number"}}</option>
+                            <option value="select" {{#if (eq field.type "select")}}selected{{/if}}>{{localize "COC-CASE-FILES.FieldType.select"}}</option>
+                            <option value="date" {{#if (eq field.type "date")}}selected{{/if}}>{{localize "COC-CASE-FILES.FieldType.date"}}</option>
+                            <option value="textarea" {{#if (eq field.type "textarea")}}selected{{/if}}>{{localize "COC-CASE-FILES.FieldType.textarea"}}</option>
                         </select>
                     </td>
                     <td class="field-options-cell">
@@ -51,7 +52,7 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         {{else}}
-                            <span class="core-badge"><i class="fas fa-shield-alt"></i> Baza</span>
+                            <span class="core-badge"><i class="fas fa-shield-alt"></i> {{localize "COC-CASE-FILES.CoreBadge"}}</span>
                         {{/if}}
                     </td>
                 </tr>

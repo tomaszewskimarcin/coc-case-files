@@ -14,9 +14,9 @@ export function getFieldsConfigApp() {
       static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
           id: `${MODULE_ID}-fields-config`,
-          title: game.i18n?.localize ? game.i18n.localize("COC-CASE-FILES.FieldsConfigTitle") : "Konfiguracja Pól Akt Osobowych (DEV)",
+          title: game.i18n?.localize ? game.i18n.localize("COC-CASE-FILES.FieldsConfigTitle") : "Personnel File Fields Manager",
           template: `modules/${MODULE_ID}/templates/fields-config.hbs`,
-          width: 820,
+          width: 860,
           height: "auto",
           closeOnSubmit: true
         });
@@ -25,11 +25,21 @@ export function getFieldsConfigApp() {
       /** @override */
       async getData(options = {}) {
         const context = await super.getData(options);
-        context.fields = this.fields.map((f, i) => ({
-          ...f,
-          index: i,
-          optionsStr: Array.isArray(f.options) ? f.options.join(", ") : (f.optionsStr || "")
-        }));
+        context.fields = this.fields.map((f, i) => {
+          let displayLabel = "";
+          if (f.labelKey && game.i18n?.has(f.labelKey)) {
+            displayLabel = game.i18n.localize(f.labelKey);
+          } else {
+            displayLabel = f.label || f.key;
+          }
+
+          return {
+            ...f,
+            index: i,
+            displayLabel: displayLabel,
+            optionsStr: Array.isArray(f.options) ? f.options.join(", ") : (f.optionsStr || "")
+          };
+        });
         return context;
       }
 
@@ -95,6 +105,7 @@ export function getFieldsConfigApp() {
 
           updatedFields.push({
             key: original.key,
+            labelKey: original.labelKey || null,
             label: entry.label || original.label || original.key,
             type: type,
             enabled: original.isCore ? true : Boolean(entry.enabled),

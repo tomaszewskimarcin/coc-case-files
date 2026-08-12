@@ -112,9 +112,19 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
         const type = f.type || "text";
         const optionsList = Array.isArray(f.options) ? f.options : [];
 
+        // Dynamic i18n label resolution
+        let label = "";
+        if (f.labelKey && game.i18n.has(f.labelKey)) {
+          label = game.i18n.localize(f.labelKey);
+        } else if (game.i18n.lang === "en" && f.labelEn) {
+          label = f.labelEn;
+        } else {
+          label = f.label || f.key;
+        }
+
         return {
           key: f.key,
-          label: f.label,
+          label: label,
           type: type,
           isSelect: type === "select",
           isNumber: type === "number",

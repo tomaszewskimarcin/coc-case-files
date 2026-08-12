@@ -2,7 +2,7 @@
   "id": "coc-case-files-dev",
   "title": "Call of Cthulhu Case Files (DEV)",
   "description": "[DEV TESTING VERSION] Custom, interactive Journal Entry templates.",
-  "version": "1.3.2-DEV",
+  "version": "1.3.3-DEV",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
