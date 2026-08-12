@@ -1,6 +1,6 @@
 import { MODULE_ID } from "./main.js";
 
-const ParentJournalPageSheet = foundry.appv1?.sheets?.JournalPageSheet || JournalPageSheet;
+const ParentJournalPageSheet = foundry.applications?.sheets?.JournalPageSheet || foundry.applications?.sheets?.JournalEntryPageSheet || foundry.appv1?.sheets?.JournalPageSheet || JournalPageSheet;
 const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation || TextEditor;
 
 export class PersonnelFileSheet extends ParentJournalPageSheet {
