@@ -102,8 +102,8 @@ Hooks.once("init", () => {
 
 // Auto-migrate any page with legacy double-prefixed type name
 Hooks.once("ready", async () => {
-  if (!game.user.isGM) return;
-  for (const journal of game.journals) {
+  if (!game.user.isGM || !game.journal) return;
+  for (const journal of game.journal) {
     for (const page of journal.pages) {
       if (page.type === typeDouble) {
         console.log(`${MODULE_ID} | Auto-migrating page '${page.name}' from legacy type ${typeDouble} to ${typeDev}`);
