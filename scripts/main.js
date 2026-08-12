@@ -7,17 +7,28 @@ const typeDev = `${MODULE_ID}.personnel-file`;
 const typeMain = "coc-case-files.personnel-file";
 const typeDouble = `${MODULE_ID}.coc-case-files.personnel-file`;
 
-// Immediate top-level DataModel registration for V14 Schema Validation compatibility (handling all legacy/DEV types)
-if (globalThis.CONFIG?.JournalEntryPage) {
-  [typeDev, typeMain, typeDouble].forEach(t => {
-    CONFIG.JournalEntryPage.dataModels[t] = PersonnelFileDataModel;
-    CONFIG.JournalEntryPage.typeLabels[t] = "COC-CASE-FILES.PageType";
-    CONFIG.JournalEntryPage.typeIcons[t] = "fas fa-user-secret";
-  });
-}
+// Ensure CONFIG.JournalEntryPage structures exist immediately at top-level script evaluation
+CONFIG.JournalEntryPage = CONFIG.JournalEntryPage || {};
+CONFIG.JournalEntryPage.dataModels = CONFIG.JournalEntryPage.dataModels || {};
+CONFIG.JournalEntryPage.typeLabels = CONFIG.JournalEntryPage.typeLabels || {};
+CONFIG.JournalEntryPage.typeIcons = CONFIG.JournalEntryPage.typeIcons || {};
+
+// Populate DataModels immediately for all 3 type variants so V14 schema validation passes early
+[typeDev, typeMain, typeDouble].forEach(t => {
+  CONFIG.JournalEntryPage.dataModels[t] = PersonnelFileDataModel;
+  CONFIG.JournalEntryPage.typeLabels[t] = "COC-CASE-FILES.PageType";
+  CONFIG.JournalEntryPage.typeIcons[t] = "fas fa-user-secret";
+});
 
 Hooks.once("init", () => {
   console.log(`${MODULE_ID} | Initializing Call of Cthulhu Case Files Module (DEV)`);
+
+  // Register Handlebars 'eq' helper safely if not present
+  if (!Handlebars.helpers["eq"]) {
+    Handlebars.registerHelper("eq", function (a, b) {
+      return a === b;
+    });
+  }
 
   // Ensure all type variants are registered in JournalEntryPage.TYPES array for V14 schema validation
   if (Array.isArray(JournalEntryPage.TYPES)) {
@@ -87,4 +98,17 @@ Hooks.once("init", () => {
       }
     }
   });
+});
+
+// Auto-migrate any page with legacy double-prefixed type name
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  for (const journal of game.journals) {
+    for (const page of journal.pages) {
+      if (page.type === typeDouble) {
+        console.log(`${MODULE_ID} | Auto-migrating page '${page.name}' from legacy type ${typeDouble} to ${typeDev}`);
+        await page.update({ type: typeDev });
+      }
+    }
+  }
 });
