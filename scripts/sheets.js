@@ -1,4 +1,4 @@
-import { MODULE_ID, DEFAULT_FIELDS_CONFIG } from "./main.js";
+import { MODULE_ID, CORE_LABEL_KEYS, DEFAULT_FIELDS_CONFIG } from "./main.js";
 
 const ParentJournalPageSheet = foundry.appv1?.sheets?.JournalPageSheet || JournalPageSheet;
 const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation || TextEditor;
@@ -114,8 +114,10 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
 
         // Dynamic i18n label resolution
         let label = "";
-        if (f.labelKey && game.i18n.has(f.labelKey)) {
-          label = game.i18n.localize(f.labelKey);
+        const coreKey = CORE_LABEL_KEYS[f.key] || f.labelKey;
+
+        if (coreKey && game.i18n?.has(coreKey)) {
+          label = game.i18n.localize(coreKey);
         } else if (game.i18n.lang === "en" && f.labelEn) {
           label = f.labelEn;
         } else {

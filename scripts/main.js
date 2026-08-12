@@ -4,6 +4,19 @@ import { getFieldsConfigApp } from "./fieldsConfigApp.js";
 
 export const MODULE_ID = "coc-case-files-dev";
 
+export const CORE_LABEL_KEYS = {
+  "fullName": "COC-CASE-FILES.FullName",
+  "alias": "COC-CASE-FILES.Alias",
+  "gender": "COC-CASE-FILES.Gender",
+  "birthDate": "COC-CASE-FILES.BirthDate",
+  "appearance.height": "COC-CASE-FILES.Height",
+  "appearance.build": "COC-CASE-FILES.Build",
+  "appearance.hair": "COC-CASE-FILES.Hair",
+  "appearance.eyes": "COC-CASE-FILES.Eyes",
+  "appearance.marks": "COC-CASE-FILES.Marks",
+  "address": "COC-CASE-FILES.Address"
+};
+
 export const DEFAULT_FIELDS_CONFIG = [
   { key: "fullName", labelKey: "COC-CASE-FILES.FullName", label: "Full Name", type: "text", enabled: true, allowProposals: true, isCore: true, isCustom: false },
   { key: "alias", labelKey: "COC-CASE-FILES.Alias", label: "Alias / Nickname", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },

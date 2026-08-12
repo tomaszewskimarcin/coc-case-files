@@ -1,3 +1,5 @@
+import { CORE_LABEL_KEYS, DEFAULT_FIELDS_CONFIG } from "./main.js";
+
 export const MODULE_ID = "coc-case-files-dev";
 
 let _FieldsConfigApp = null;
@@ -27,8 +29,10 @@ export function getFieldsConfigApp() {
         const context = await super.getData(options);
         context.fields = this.fields.map((f, i) => {
           let displayLabel = "";
-          if (f.labelKey && game.i18n?.has(f.labelKey)) {
-            displayLabel = game.i18n.localize(f.labelKey);
+          const coreKey = CORE_LABEL_KEYS[f.key] || f.labelKey;
+
+          if (coreKey && game.i18n?.has(coreKey)) {
+            displayLabel = game.i18n.localize(coreKey);
           } else {
             displayLabel = f.label || f.key;
           }
@@ -87,6 +91,14 @@ export function getFieldsConfigApp() {
           });
           this.render(true);
         });
+
+        // Reset to defaults button listener
+        root.querySelector("[data-action='reset-defaults']")?.addEventListener("click", async () => {
+          this.fields = foundry.utils.deepClone(DEFAULT_FIELDS_CONFIG);
+          await game.settings.set(MODULE_ID, "fieldsConfig", this.fields);
+          ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ResetDefaultsSuccess"));
+          this.render(true);
+        });
       }
 
       /** @override */
@@ -104,9 +116,11 @@ export function getFieldsConfigApp() {
             ? entry.optionsStr.split(",").map(s => s.trim()).filter(Boolean)
             : (original.options || []);
 
+          const labelKey = CORE_LABEL_KEYS[original.key] || original.labelKey || null;
+
           updatedFields.push({
             key: original.key,
-            labelKey: original.labelKey || null,
+            labelKey: labelKey,
             label: entry.label || original.label || original.key,
             type: type,
             enabled: original.isCore ? true : Boolean(entry.enabled),

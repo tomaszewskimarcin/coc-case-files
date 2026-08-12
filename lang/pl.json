@@ -47,6 +47,8 @@
     "FieldsConfigSubtitle": "Zarządzaj etykietami, typami danych oraz uprawnieniem graczy do wprowadzania poprawek.",
     "AddField": "Dodaj Nowe Pole",
     "SaveConfig": "Zapisz Konfigurację",
+    "ResetDefaults": "Przywróć Domyślne",
+    "ResetDefaultsSuccess": "Przywrócono domyślną konfigurację pól akt.",
     "SelectOption": "Wybierz opcję...",
     "TableHeaderLabel": "Nazwa Pola (Etykieta)",
     "TableHeaderType": "Typ Danych",

@@ -652,7 +652,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-top: 4px;
   height: 38px;
   flex-shrink: 0;
@@ -661,18 +661,28 @@
 .fields-config-footer button {
   height: 36px;
   line-height: 36px;
-  padding: 0 16px;
+  padding: 0 14px;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   box-sizing: border-box;
   margin: 0;
   flex: 1;
+}
+
+.reset-defaults-btn {
+  background: #64748b;
+  color: white;
+  border: 1px solid #475569;
+}
+
+.reset-defaults-btn:hover {
+  background: #475569;
 }
 
 .add-field-btn {

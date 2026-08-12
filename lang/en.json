@@ -47,6 +47,8 @@
     "FieldsConfigSubtitle": "Manage field labels, data types, and player proposal rights.",
     "AddField": "Add Custom Field",
     "SaveConfig": "Save Configuration",
+    "ResetDefaults": "Reset to Defaults",
+    "ResetDefaultsSuccess": "Reset personnel file fields to default schema.",
     "SelectOption": "Select option...",
     "TableHeaderLabel": "Field Name (Label)",
     "TableHeaderType": "Data Type",
