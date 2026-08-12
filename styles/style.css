@@ -357,7 +357,9 @@
   align-items: center;
 }
 
-.journal-entry-page.personnel-file input.player-draft-input {
+.journal-entry-page.personnel-file input.player-draft-input,
+.journal-entry-page.personnel-file select.player-draft-input,
+.journal-entry-page.personnel-file textarea.player-draft-input {
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid #7f7563;
   border-radius: 3px;
@@ -366,7 +368,9 @@
   font-size: 13px;
 }
 
-.journal-entry-page.personnel-file input.player-draft-input:focus {
+.journal-entry-page.personnel-file input.player-draft-input:focus,
+.journal-entry-page.personnel-file select.player-draft-input:focus,
+.journal-entry-page.personnel-file textarea.player-draft-input:focus {
   outline: none;
   background: #fff;
   border-color: #222;
@@ -520,20 +524,118 @@
   opacity: 0.7;
 }
 
-/* Edit Sheet Specifics */
-.dossier-header-edit {
-  text-align: center;
-  border-bottom: 2px solid #333;
-  margin-bottom: 15px;
-  padding-bottom: 5px;
+/* GM Fields Configurator App Styling */
+.fields-config-app {
+  padding: 15px;
 }
-.dossier-header-edit h2 {
-  font-size: 16px;
+
+.fields-config-header h2 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
   font-weight: bold;
-  margin: 0;
 }
-.dossier-header-edit p {
+
+.fields-config-header p {
+  margin: 0 0 15px 0;
   font-size: 12px;
-  color: #666;
-  margin: 0;
+  opacity: 0.8;
+}
+
+.fields-table-wrapper {
+  max-height: 480px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 15px;
+}
+
+.fields-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.fields-table th {
+  background: #2c3e50;
+  color: white;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.fields-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.fields-table tr.custom-field-row {
+  background-color: rgba(46, 204, 113, 0.05);
+}
+
+.fields-table .text-center {
+  text-align: center;
+}
+
+.fields-table input[type="text"],
+.fields-table select {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #bdc3c7;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.delete-field-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.delete-field-btn:hover {
+  background: #c0392b;
+}
+
+.core-badge {
+  font-size: 11px;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.fields-config-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.add-field-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-field-btn:hover {
+  background: #219150;
+}
+
+.save-config-btn {
+  background: #2980b9;
+  color: white;
+  border: none;
+  padding: 6px 18px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-config-btn:hover {
+  background: #1f6391;
 }

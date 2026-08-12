@@ -1,6 +1,6 @@
 export class PersonnelFileDataModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
-    const { StringField, HTMLField, SchemaField } = foundry.data.fields;
+    const { StringField, HTMLField, SchemaField, ObjectField } = foundry.data.fields;
     return {
       fullName: new StringField({ required: true, blank: true, initial: "" }),
       alias: new StringField({ required: true, blank: true, initial: "" }),
@@ -15,7 +15,8 @@ export class PersonnelFileDataModel extends foundry.abstract.TypeDataModel {
         marks: new StringField({ required: true, blank: true, initial: "" })
       }),
       address: new StringField({ required: true, blank: true, initial: "" }),
-      description: new HTMLField({ required: true, blank: true, initial: "" })
+      description: new HTMLField({ required: true, blank: true, initial: "" }),
+      customData: new ObjectField({ required: true, initial: {} })
     };
   }
 }

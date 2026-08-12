@@ -1,7 +1,21 @@
 import { PersonnelFileDataModel } from "./dataModels.js";
 import { PersonnelFileSheet } from "./sheets.js";
+import { getFieldsConfigApp } from "./fieldsConfigApp.js";
 
 export const MODULE_ID = "coc-case-files-dev";
+
+export const DEFAULT_FIELDS_CONFIG = [
+  { key: "fullName", label: "Imię i Nazwisko", type: "text", enabled: true, allowProposals: true, isCore: true, isCustom: false },
+  { key: "alias", label: "Pseudonim / Ksywa", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "gender", label: "Płeć", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "birthDate", label: "Data urodzenia", type: "date", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.height", label: "Wzrost", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.build", label: "Budowa ciała", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.hair", label: "Kolor włosów", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.eyes", label: "Kolor oczu", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "appearance.marks", label: "Znaki szczególne", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false },
+  { key: "address", label: "Adres zamieszkania", type: "text", enabled: true, allowProposals: true, isCore: false, isCustom: false }
+];
 
 const typeDev = `${MODULE_ID}.personnel-file`;
 const typeMain = "coc-case-files.personnel-file";
@@ -67,6 +81,26 @@ Hooks.once("init", () => {
     types: allTypes,
     makeDefault: true,
     label: "COC-CASE-FILES.PageType"
+  });
+
+  // Register Fields Configuration World Setting
+  game.settings.register(MODULE_ID, "fieldsConfig", {
+    name: "Konfiguracja Pol Akt",
+    scope: "world",
+    config: false,
+    type: Array,
+    default: DEFAULT_FIELDS_CONFIG
+  });
+
+  // Register Setting Menu Button for Fields Configurator
+  const FieldsConfigAppClass = getFieldsConfigApp();
+  game.settings.registerMenu(MODULE_ID, "fieldsConfigMenu", {
+    name: game.i18n.localize("COC-CASE-FILES.FieldsConfigMenuLabel"),
+    label: game.i18n.localize("COC-CASE-FILES.FieldsConfigMenuLabel"),
+    hint: game.i18n.localize("COC-CASE-FILES.FieldsConfigMenuHint"),
+    icon: "fas fa-cogs",
+    type: FieldsConfigAppClass,
+    restricted: true
   });
 
   // Register Module World Setting for Era Themes

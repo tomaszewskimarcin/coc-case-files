@@ -40,7 +40,14 @@
     "OfficialDescription": "Official Case Summary",
     "PlayerNotepadTitle": "Player Investigation Notepad",
     "PlayerNotepadPlaceholder": "Type your personal investigation notes, clues, and hypotheses here...",
-    "PlayerNotepadHint": "Auto-saved locally in your browser. Private scratchpad (not sent to GM)."
+    "PlayerNotepadHint": "Auto-saved locally in your browser. Private scratchpad (not sent to GM).",
+    "FieldsConfigMenuLabel": "Manage Personnel File Fields (DEV)",
+    "FieldsConfigMenuHint": "Configure visible fields, data types, options, and player proposal permissions.",
+    "FieldsConfigTitle": "Personnel File Fields Manager",
+    "FieldsConfigSubtitle": "Manage field labels, data types, and player proposal rights.",
+    "AddField": "Add Custom Field",
+    "SaveConfig": "Save Configuration",
+    "SelectOption": "Select option..."
   },
   "TYPES": {
     "JournalEntryPage": {

@@ -94,13 +94,33 @@
                         </div>
                     {{else}}
                         {{#if ../canPropose}}
-                            {{!-- Player Draft Input with explicit Submit Proposal Button & persisted draft --}}
-                            <div class="propose-draft-group">
-                                <input type="text" class="player-draft-input" data-field="{{field.key}}" value="{{field.draft}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
-                                <button type="button" class="submit-proposal-btn" data-action="submit-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.SubmitProposal'}}">
-                                    <i class="fas fa-paper-plane"></i> {{localize "COC-CASE-FILES.SubmitProposal"}}
-                                </button>
-                            </div>
+                            {{#if field.allowProposals}}
+                                {{!-- Player Draft Input with explicit Submit Proposal Button & persisted draft --}}
+                                <div class="propose-draft-group">
+                                    {{#if field.isSelect}}
+                                        <select class="player-draft-input" data-field="{{field.key}}">
+                                            <option value="" disabled {{#unless field.draft}}selected{{/unless}}>-- {{localize "COC-CASE-FILES.SelectOption"}} --</option>
+                                            {{#each field.options as |opt|}}
+                                                <option value="{{opt}}" {{#if (eq opt ../draft)}}selected{{/if}}>{{opt}}</option>
+                                            {{/each}}
+                                        </select>
+                                    {{else if field.isNumber}}
+                                        <input type="number" class="player-draft-input" data-field="{{field.key}}" value="{{field.draft}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+                                    {{else if field.isDate}}
+                                        <input type="date" class="player-draft-input" data-field="{{field.key}}" value="{{field.draft}}">
+                                    {{else if field.isTextarea}}
+                                        <textarea class="player-draft-input" data-field="{{field.key}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">{{field.draft}}</textarea>
+                                    {{else}}
+                                        <input type="text" class="player-draft-input" data-field="{{field.key}}" value="{{field.draft}}" placeholder="{{localize 'COC-CASE-FILES.ProposeDetail'}}">
+                                    {{/if}}
+
+                                    <button type="button" class="submit-proposal-btn" data-action="submit-proposal" data-field="{{field.key}}" title="{{localize 'COC-CASE-FILES.SubmitProposal'}}">
+                                        <i class="fas fa-paper-plane"></i> {{localize "COC-CASE-FILES.SubmitProposal"}}
+                                    </button>
+                                </div>
+                            {{else}}
+                                <span class="value unconfirmed-placeholder">------- [BRAK DANYCH] -------</span>
+                            {{/if}}
                         {{else}}
                             <span class="value unconfirmed-placeholder">------- [BRAK DANYCH] -------</span>
                         {{/if}}

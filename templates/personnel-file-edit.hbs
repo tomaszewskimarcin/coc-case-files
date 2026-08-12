@@ -1,69 +1,67 @@
-<form class="personnel-file-edit-sheet flexcol" autocomplete="off">
-    <div class="dossier-header-edit">
-        <h2>{{localize "COC-CASE-FILES.HeaderTop"}}</h2>
-        <p>{{localize "COC-CASE-FILES.HeaderSub"}}</p>
+<form class="journal-entry-page personnel-file-edit flexcol" autocomplete="off">
+    <div class="form-group">
+        <label>{{localize "COC-CASE-FILES.FullName"}}</label>
+        <input type="text" name="system.fullName" value="{{document.system.fullName}}" placeholder="{{document.name}}">
     </div>
 
-    <fieldset>
-        <legend>Dane Podstawowe</legend>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.FullName"}}</label>
-            <input type="text" name="system.fullName" value="{{document.system.fullName}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Alias"}}</label>
-            <input type="text" name="system.alias" value="{{document.system.alias}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Gender"}}</label>
-            <input type="text" name="system.gender" value="{{document.system.gender}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.BirthDate"}}</label>
-            <input type="text" name="system.birthDate" value="{{document.system.birthDate}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Role"}}</label>
-            <select name="system.role">
-                {{selectOptions roles selected=document.system.role localize=true}}
-            </select>
-        </div>
+    <div class="form-group">
+        <label>{{localize "COC-CASE-FILES.Role"}}</label>
+        <select name="system.role">
+            <option value="">-- {{localize "COC-CASE-FILES.UnassignedRole"}} --</option>
+            <option value="suspect" {{#if (eq document.system.role "suspect")}}selected{{/if}}>{{localize "COC-CASE-FILES.Roles.suspect"}}</option>
+            <option value="witness" {{#if (eq document.system.role "witness")}}selected{{/if}}>{{localize "COC-CASE-FILES.Roles.witness"}}</option>
+            <option value="victim" {{#if (eq document.system.role "victim")}}selected{{/if}}>{{localize "COC-CASE-FILES.Roles.victim"}}</option>
+        </select>
+    </div>
+
+    <fieldset class="edit-section">
+        <legend>Dane Podstawowe & Pola Customowe</legend>
+        {{#each fields as |field|}}
+            {{#unless (eq field.key "fullName")}}
+            <div class="form-group">
+                <label>{{field.label}}</label>
+                {{#if field.isCustom}}
+                    {{#if field.isSelect}}
+                        <select name="system.customData.{{field.key}}">
+                            <option value="">-- wybierz --</option>
+                            {{#each field.options as |opt|}}
+                                <option value="{{opt}}" {{#if (eq opt field.value)}}selected{{/if}}>{{opt}}</option>
+                            {{/each}}
+                        </select>
+                    {{else if field.isNumber}}
+                        <input type="number" name="system.customData.{{field.key}}" value="{{field.value}}">
+                    {{else if field.isDate}}
+                        <input type="date" name="system.customData.{{field.key}}" value="{{field.value}}">
+                    {{else if field.isTextarea}}
+                        <textarea name="system.customData.{{field.key}}">{{field.value}}</textarea>
+                    {{else}}
+                        <input type="text" name="system.customData.{{field.key}}" value="{{field.value}}">
+                    {{/if}}
+                {{else}}
+                    {{#if field.isSelect}}
+                        <select name="system.{{field.key}}">
+                            <option value="">-- wybierz --</option>
+                            {{#each field.options as |opt|}}
+                                <option value="{{opt}}" {{#if (eq opt field.value)}}selected{{/if}}>{{opt}}</option>
+                            {{/each}}
+                        </select>
+                    {{else if field.isNumber}}
+                        <input type="number" name="system.{{field.key}}" value="{{field.value}}">
+                    {{else if field.isDate}}
+                        <input type="date" name="system.{{field.key}}" value="{{field.value}}">
+                    {{else if field.isTextarea}}
+                        <textarea name="system.{{field.key}}">{{field.value}}</textarea>
+                    {{else}}
+                        <input type="text" name="system.{{field.key}}" value="{{field.value}}">
+                    {{/if}}
+                {{/if}}
+            </div>
+            {{/unless}}
+        {{/each}}
     </fieldset>
 
-    <fieldset>
-        <legend>{{localize "COC-CASE-FILES.Appearance"}}</legend>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Height"}}</label>
-            <input type="text" name="system.appearance.height" value="{{document.system.appearance.height}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Build"}}</label>
-            <input type="text" name="system.appearance.build" value="{{document.system.appearance.build}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Hair"}}</label>
-            <input type="text" name="system.appearance.hair" value="{{document.system.appearance.hair}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Eyes"}}</label>
-            <input type="text" name="system.appearance.eyes" value="{{document.system.appearance.eyes}}">
-        </div>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Marks"}}</label>
-            <input type="text" name="system.appearance.marks" value="{{document.system.appearance.marks}}">
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Miejsce Zamieszkania</legend>
-        <div class="form-group">
-            <label>{{localize "COC-CASE-FILES.Address"}}</label>
-            <input type="text" name="system.address" value="{{document.system.address}}">
-        </div>
-    </fieldset>
-
-    <div class="form-group stacked">
-        <label>{{localize "COC-CASE-FILES.Description"}}</label>
-        {{editor editorContent target="system.description" button=true owner=owner editable=editable engine="prosemirror"}}
+    <div class="form-group editor-group">
+        <label>{{localize "COC-CASE-FILES.OfficialDescription"}}</label>
+        {{editor editorContent target="system.description" button=true owner=owner editable=editable}}
     </div>
 </form>

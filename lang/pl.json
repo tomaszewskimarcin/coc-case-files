@@ -40,7 +40,14 @@
     "OfficialDescription": "Oficjalne Podsumowanie Akta",
     "PlayerNotepadTitle": "Notatnik Śledczy Gracza",
     "PlayerNotepadPlaceholder": "Wpisz tutaj swoje prywatne notatki ze śledztwa, powiązania i hipotezy...",
-    "PlayerNotepadHint": "Automatyczny zapis w Twojej przeglądarce. Prywatny brudnopis (nie jest wysyłany do GM)."
+    "PlayerNotepadHint": "Automatyczny zapis w Twojej przeglądarce. Prywatny brudnopis (nie jest wysyłany do GM).",
+    "FieldsConfigMenuLabel": "Zarządzaj Polami Akt Osobowych (DEV)",
+    "FieldsConfigMenuHint": "Konfiguruj widoczne pola, typy danych, opcje oraz uprawnienia zgłaszania propozycji przez graczy.",
+    "FieldsConfigTitle": "Konfigurator Pol Akt Osobowych",
+    "FieldsConfigSubtitle": "Zarządzaj etykietami, typami danych oraz uprawnieniem graczy do wprowadzania poprawek.",
+    "AddField": "Dodaj Nowe Pole",
+    "SaveConfig": "Zapisz Konfigurację",
+    "SelectOption": "Wybierz opcję..."
   },
   "TYPES": {
     "JournalEntryPage": {

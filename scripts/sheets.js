@@ -1,4 +1,4 @@
-const MODULE_ID = "coc-case-files-dev";
+import { MODULE_ID, DEFAULT_FIELDS_CONFIG } from "./main.js";
 
 const ParentJournalPageSheet = foundry.appv1?.sheets?.JournalPageSheet || JournalPageSheet;
 const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation || TextEditor;
@@ -91,34 +91,45 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
       context.footerRight = "FORM-POL-90/A";
     }
 
-    const fieldDefinitions = [
-      { key: "fullName", label: game.i18n.localize("COC-CASE-FILES.FullName"), value: doc.system?.fullName || "" },
-      { key: "alias", label: game.i18n.localize("COC-CASE-FILES.Alias"), value: doc.system?.alias || "" },
-      { key: "gender", label: game.i18n.localize("COC-CASE-FILES.Gender"), value: doc.system?.gender || "" },
-      { key: "birthDate", label: game.i18n.localize("COC-CASE-FILES.BirthDate"), value: doc.system?.birthDate || "" },
-      { key: "appearance.height", label: game.i18n.localize("COC-CASE-FILES.Height"), value: doc.system?.appearance?.height || "" },
-      { key: "appearance.build", label: game.i18n.localize("COC-CASE-FILES.Build"), value: doc.system?.appearance?.build || "" },
-      { key: "appearance.hair", label: game.i18n.localize("COC-CASE-FILES.Hair"), value: doc.system?.appearance?.hair || "" },
-      { key: "appearance.eyes", label: game.i18n.localize("COC-CASE-FILES.Eyes"), value: doc.system?.appearance?.eyes || "" },
-      { key: "appearance.marks", label: game.i18n.localize("COC-CASE-FILES.Marks"), value: doc.system?.appearance?.marks || "" },
-      { key: "address", label: game.i18n.localize("COC-CASE-FILES.Address"), value: doc.system?.address || "" }
-    ];
+    // Read Fields Config (Schema)
+    const configuredFields = game.settings.get(MODULE_ID, "fieldsConfig") || DEFAULT_FIELDS_CONFIG;
 
-    const fields = fieldDefinitions.map(f => {
-      const val = (f.value ?? "").toString().trim();
-      const isLocked = Boolean(val);
-      const rawProp = foundry.utils.getProperty(proposals, f.key) || proposals[f.key] || null;
-      const draftVal = localStorage.getItem(this.#getDraftStorageKey(f.key)) || "";
+    const fields = configuredFields
+      .filter(f => f.enabled !== false)
+      .map(f => {
+        let rawVal = "";
+        if (f.isCustom) {
+          rawVal = doc.system?.customData?.[f.key] ?? "";
+        } else {
+          rawVal = foundry.utils.getProperty(doc.system, f.key) ?? "";
+        }
 
-      return {
-        key: f.key,
-        label: f.label,
-        value: val,
-        isLocked: isLocked,
-        proposal: isLocked ? null : rawProp,
-        draft: draftVal
-      };
-    });
+        const val = (rawVal ?? "").toString().trim();
+        const isLocked = Boolean(val);
+        const rawProp = foundry.utils.getProperty(proposals, f.key) || proposals[f.key] || null;
+        const draftVal = localStorage.getItem(this.#getDraftStorageKey(f.key)) || "";
+
+        const type = f.type || "text";
+        const optionsList = Array.isArray(f.options) ? f.options : [];
+
+        return {
+          key: f.key,
+          label: f.label,
+          type: type,
+          isSelect: type === "select",
+          isNumber: type === "number",
+          isDate: type === "date",
+          isTextarea: type === "textarea",
+          isText: type === "text",
+          options: optionsList,
+          value: val,
+          isLocked: isLocked,
+          proposal: isLocked ? null : rawProp,
+          draft: draftVal,
+          allowProposals: f.allowProposals !== false,
+          isCustom: Boolean(f.isCustom)
+        };
+      });
 
     context.isGM = isGM;
     context.canPropose = canPropose;
@@ -153,7 +164,13 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
 
     // Helper to send proposal and clear local draft
     const sendProposal = async (field, val) => {
-      const currentVal = foundry.utils.getProperty(this.document.system, field);
+      let currentVal = "";
+      if (field.startsWith("custom_")) {
+        currentVal = this.document.system?.customData?.[field] ?? "";
+      } else {
+        currentVal = foundry.utils.getProperty(this.document.system, field);
+      }
+
       if (currentVal && String(currentVal).trim()) {
         ui.notifications.warn(game.i18n.localize("COC-CASE-FILES.FieldLockedWarn"));
         return;
@@ -180,12 +197,14 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
     // Auto-save player draft to localStorage as they type or select
     const draftInputs = root.querySelectorAll ? root.querySelectorAll(".player-draft-input") : $(root).find(".player-draft-input");
     draftInputs.forEach?.(input => {
-      input.addEventListener("input", () => {
+      const handler = () => {
         const field = input.dataset.field;
         if (field) {
           localStorage.setItem(this.#getDraftStorageKey(field), input.value);
         }
-      });
+      };
+      input.addEventListener("input", handler);
+      input.addEventListener("change", handler);
     });
 
     // Auto-save role draft to localStorage
@@ -234,7 +253,11 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
 
         if (val !== undefined) {
           const updateData = {};
-          updateData[`system.${field}`] = val;
+          if (field.startsWith("custom_")) {
+            updateData[`system.customData.${field}`] = val;
+          } else {
+            updateData[`system.${field}`] = val;
+          }
 
           // 1. Save directly to system data (locks the field)
           await this.document.update(updateData);
