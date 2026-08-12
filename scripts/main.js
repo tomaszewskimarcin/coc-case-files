@@ -7,18 +7,33 @@ const typeDev = `${MODULE_ID}.personnel-file`;
 const typeMain = "coc-case-files.personnel-file";
 const typeDouble = `${MODULE_ID}.coc-case-files.personnel-file`;
 
-// Ensure CONFIG.JournalEntryPage structures exist immediately at top-level script evaluation
+const allTypes = [typeDev, typeMain, typeDouble];
+
+// 1. Immediate top-level DataModel & CONFIG registration for early document initialization
 CONFIG.JournalEntryPage = CONFIG.JournalEntryPage || {};
 CONFIG.JournalEntryPage.dataModels = CONFIG.JournalEntryPage.dataModels || {};
 CONFIG.JournalEntryPage.typeLabels = CONFIG.JournalEntryPage.typeLabels || {};
 CONFIG.JournalEntryPage.typeIcons = CONFIG.JournalEntryPage.typeIcons || {};
 
-// Populate DataModels immediately for all 3 type variants so V14 schema validation passes early
-[typeDev, typeMain, typeDouble].forEach(t => {
+allTypes.forEach(t => {
   CONFIG.JournalEntryPage.dataModels[t] = PersonnelFileDataModel;
   CONFIG.JournalEntryPage.typeLabels[t] = "COC-CASE-FILES.PageType";
   CONFIG.JournalEntryPage.typeIcons[t] = "fas fa-user-secret";
 });
+
+// 2. Intercept raw source document creation BEFORE SchemaField#_validateRecursive runs
+if (typeof JournalEntryPage !== "undefined" && JournalEntryPage.migrateData) {
+  const originalMigrateData = JournalEntryPage.migrateData;
+  JournalEntryPage.migrateData = function (source) {
+    if (source && typeof source === "object") {
+      if (source.type === typeDouble || source.type === typeMain) {
+        console.log(`${MODULE_ID} | Intercepted legacy raw page type '${source.type}', auto-coercing to '${typeDev}'`);
+        source.type = typeDev;
+      }
+    }
+    return originalMigrateData.call(this, source);
+  };
+}
 
 Hooks.once("init", () => {
   console.log(`${MODULE_ID} | Initializing Call of Cthulhu Case Files Module (DEV)`);
@@ -32,13 +47,13 @@ Hooks.once("init", () => {
 
   // Ensure all type variants are registered in JournalEntryPage.TYPES array for V14 schema validation
   if (Array.isArray(JournalEntryPage.TYPES)) {
-    [typeDev, typeMain, typeDouble].forEach(t => {
+    allTypes.forEach(t => {
       if (!JournalEntryPage.TYPES.includes(t)) JournalEntryPage.TYPES.push(t);
     });
   }
 
   // Register Data Models using non-deprecated V14 API
-  [typeDev, typeMain, typeDouble].forEach(t => {
+  allTypes.forEach(t => {
     CONFIG.JournalEntryPage.dataModels[t] = PersonnelFileDataModel;
     CONFIG.JournalEntryPage.typeLabels[t] = "COC-CASE-FILES.PageType";
     CONFIG.JournalEntryPage.typeIcons[t] = "fas fa-user-secret";
@@ -49,7 +64,7 @@ Hooks.once("init", () => {
 
   // Register the Sheet for all custom page types
   DocumentSheetConfigApp.registerSheet(JournalEntryPage, MODULE_ID, PersonnelFileSheet, {
-    types: [typeDev, typeMain, typeDouble],
+    types: allTypes,
     makeDefault: true,
     label: "COC-CASE-FILES.PageType"
   });
@@ -100,13 +115,13 @@ Hooks.once("init", () => {
   });
 });
 
-// Auto-migrate any page with legacy double-prefixed type name
+// Auto-migrate any page with legacy double-prefixed type name in world database
 Hooks.once("ready", async () => {
   if (!game.user.isGM || !game.journal) return;
   for (const journal of game.journal) {
     for (const page of journal.pages) {
-      if (page.type === typeDouble) {
-        console.log(`${MODULE_ID} | Auto-migrating page '${page.name}' from legacy type ${typeDouble} to ${typeDev}`);
+      if (page.type === typeDouble || page.type === typeMain) {
+        console.log(`${MODULE_ID} | Auto-migrating page '${page.name}' from legacy type ${page.type} to ${typeDev}`);
         await page.update({ type: typeDev });
       }
     }
