@@ -1,0 +1,71 @@
+<form class="fields-config-app flexcol" autocomplete="off">
+    <header class="fields-config-header">
+        <h2><i class="fas fa-cogs"></i> {{localize "COC-CASE-FILES.FieldsConfigTitle"}}</h2>
+        <p>{{localize "COC-CASE-FILES.FieldsConfigSubtitle"}}</p>
+    </header>
+
+    <div class="fields-table-wrapper">
+        <table class="fields-table">
+            <thead>
+                <tr>
+                    <th>Nazwa Pola (Etykieta)</th>
+                    <th>Typ Danych</th>
+                    <th>Opcje Listy (select, po przecinku)</th>
+                    <th class="text-center" title="Czy gracze mogą zgłaszać propozycje wpisu?">Propozycje Graczy</th>
+                    <th class="text-center" title="Czy pole jest widoczne w teczce?">Aktywne</th>
+                    <th class="text-center">Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each fields as |field index|}}
+                <tr class="field-row {{#if field.isCustom}}custom-field-row{{else}}core-field-row{{/if}}">
+                    <td class="field-label-cell">
+                        <input type="text" name="fields.{{index}}.label" value="{{field.label}}" required>
+                        <input type="hidden" name="fields.{{index}}.key" value="{{field.key}}">
+                    </td>
+                    <td class="field-type-cell">
+                        <select name="fields.{{index}}.type" class="field-type-select" data-index="{{index}}">
+                            <option value="text" {{#if (eq field.type "text")}}selected{{/if}}>Tekst (Jednolinijkowy)</option>
+                            <option value="number" {{#if (eq field.type "number")}}selected{{/if}}>Liczba</option>
+                            <option value="select" {{#if (eq field.type "select")}}selected{{/if}}>Lista rozwijana (select)</option>
+                            <option value="date" {{#if (eq field.type "date")}}selected{{/if}}>Data</option>
+                            <option value="textarea" {{#if (eq field.type "textarea")}}selected{{/if}}>Obszar tekstowy (multiline)</option>
+                        </select>
+                    </td>
+                    <td class="field-options-cell">
+                        <input type="text" name="fields.{{index}}.optionsStr" value="{{field.optionsStr}}" placeholder="np. Podejrzany, Świadek, Ofiara" {{#unless (eq field.type "select")}}disabled{{/unless}}>
+                    </td>
+                    <td class="text-center">
+                        <input type="checkbox" name="fields.{{index}}.allowProposals" {{#if field.allowProposals}}checked{{/if}}>
+                    </td>
+                    <td class="text-center">
+                        {{#if field.isCore}}
+                            <input type="checkbox" name="fields.{{index}}.enabled" checked disabled title="Pola podstawowe są zawsze aktywne.">
+                        {{else}}
+                            <input type="checkbox" name="fields.{{index}}.enabled" {{#if field.enabled}}checked{{/if}}>
+                        {{/if}}
+                    </td>
+                    <td class="text-center actions-cell">
+                        {{#if field.isCustom}}
+                            <button type="button" class="delete-field-btn" data-action="delete-field" data-index="{{index}}" title="Usuń pole customowe">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        {{else}}
+                            <span class="core-badge"><i class="fas fa-shield-alt"></i> Baza</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="fields-config-footer flexrow">
+        <button type="button" class="add-field-btn" data-action="add-field">
+            <i class="fas fa-plus"></i> {{localize "COC-CASE-FILES.AddField"}}
+        </button>
+        <button type="submit" class="save-config-btn">
+            <i class="fas fa-save"></i> {{localize "COC-CASE-FILES.SaveConfig"}}
+        </button>
+    </footer>
+</form>
