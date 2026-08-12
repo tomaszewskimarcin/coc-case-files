@@ -1,6 +1,9 @@
 import { MODULE_ID } from "./main.js";
 
-export class PersonnelFileSheet extends JournalPageSheet {
+const ParentJournalPageSheet = foundry.appv1?.sheets?.JournalPageSheet || JournalPageSheet;
+const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation || TextEditor;
+
+export class PersonnelFileSheet extends ParentJournalPageSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -127,7 +130,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
     if (this.isEditable) {
       context.editorContent = doc.system?.description || "";
     } else {
-      context.descriptionHTML = await TextEditor.enrichHTML(doc.system?.description || "", {
+      context.descriptionHTML = await TextEditorImpl.enrichHTML(doc.system?.description || "", {
         secrets: doc.isOwner,
         async: true
       });

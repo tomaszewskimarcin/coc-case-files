@@ -5,37 +5,40 @@ export const MODULE_ID = "coc-case-files-dev";
 
 const typeDev = `${MODULE_ID}.personnel-file`;
 const typeMain = "coc-case-files.personnel-file";
+const typeDouble = `${MODULE_ID}.coc-case-files.personnel-file`;
 
-// Immediate top-level DataModel registration so Foundry V14 schema validation passes during early document initialization
+// Immediate top-level DataModel registration for V14 Schema Validation compatibility (handling all legacy/DEV types)
 if (globalThis.CONFIG?.JournalEntryPage) {
-  CONFIG.JournalEntryPage.dataModels[typeDev] = PersonnelFileDataModel;
-  CONFIG.JournalEntryPage.dataModels[typeMain] = PersonnelFileDataModel;
-  CONFIG.JournalEntryPage.typeLabels[typeDev] = "COC-CASE-FILES.PageType";
-  CONFIG.JournalEntryPage.typeLabels[typeMain] = "COC-CASE-FILES.PageType";
-  CONFIG.JournalEntryPage.typeIcons[typeDev] = "fas fa-user-secret";
-  CONFIG.JournalEntryPage.typeIcons[typeMain] = "fas fa-user-secret";
+  [typeDev, typeMain, typeDouble].forEach(t => {
+    CONFIG.JournalEntryPage.dataModels[t] = PersonnelFileDataModel;
+    CONFIG.JournalEntryPage.typeLabels[t] = "COC-CASE-FILES.PageType";
+    CONFIG.JournalEntryPage.typeIcons[t] = "fas fa-user-secret";
+  });
 }
 
 Hooks.once("init", () => {
   console.log(`${MODULE_ID} | Initializing Call of Cthulhu Case Files Module (DEV)`);
 
-  // Ensure both document types are registered in JournalEntryPage.TYPES array for V14 schema validation
+  // Ensure all type variants are registered in JournalEntryPage.TYPES array for V14 schema validation
   if (Array.isArray(JournalEntryPage.TYPES)) {
-    if (!JournalEntryPage.TYPES.includes(typeDev)) JournalEntryPage.TYPES.push(typeDev);
-    if (!JournalEntryPage.TYPES.includes(typeMain)) JournalEntryPage.TYPES.push(typeMain);
+    [typeDev, typeMain, typeDouble].forEach(t => {
+      if (!JournalEntryPage.TYPES.includes(t)) JournalEntryPage.TYPES.push(t);
+    });
   }
 
-  // Register Data Models for DEV and Main types
-  CONFIG.JournalEntryPage.dataModels[typeDev] = PersonnelFileDataModel;
-  CONFIG.JournalEntryPage.dataModels[typeMain] = PersonnelFileDataModel;
-  CONFIG.JournalEntryPage.typeLabels[typeDev] = "COC-CASE-FILES.PageType";
-  CONFIG.JournalEntryPage.typeLabels[typeMain] = "COC-CASE-FILES.PageType";
-  CONFIG.JournalEntryPage.typeIcons[typeDev] = "fas fa-user-secret";
-  CONFIG.JournalEntryPage.typeIcons[typeMain] = "fas fa-user-secret";
+  // Register Data Models using non-deprecated V14 API
+  [typeDev, typeMain, typeDouble].forEach(t => {
+    CONFIG.JournalEntryPage.dataModels[t] = PersonnelFileDataModel;
+    CONFIG.JournalEntryPage.typeLabels[t] = "COC-CASE-FILES.PageType";
+    CONFIG.JournalEntryPage.typeIcons[t] = "fas fa-user-secret";
+  });
 
-  // Register the Sheet for both custom page types
-  DocumentSheetConfig.registerSheet(JournalEntryPage, MODULE_ID, PersonnelFileSheet, {
-    types: [typeDev, typeMain],
+  // Use non-deprecated V14 DocumentSheetConfig namespace
+  const DocumentSheetConfigApp = foundry.applications?.apps?.DocumentSheetConfig || DocumentSheetConfig;
+
+  // Register the Sheet for all custom page types
+  DocumentSheetConfigApp.registerSheet(JournalEntryPage, MODULE_ID, PersonnelFileSheet, {
+    types: [typeDev, typeMain, typeDouble],
     makeDefault: true,
     label: "COC-CASE-FILES.PageType"
   });
