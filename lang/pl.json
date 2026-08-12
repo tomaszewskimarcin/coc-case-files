@@ -1,6 +1,6 @@
 {
   "COC-CASE-FILES": {
-    "PageType": "Akta Osobowe",
+    "PageType": "Akta Osobowe (DEV)",
     "Role": "Rola w sprawie",
     "Roles": {
       "suspect": "Podejrzany",
@@ -44,9 +44,8 @@
   },
   "TYPES": {
     "JournalEntryPage": {
-      "coc-case-files": {
-        "personnel-file": "Akta Osobowe"
-      }
+      "coc-case-files-dev.personnel-file": "Akta Osobowe (DEV)",
+      "coc-case-files.personnel-file": "Akta Osobowe"
     }
   }
 }

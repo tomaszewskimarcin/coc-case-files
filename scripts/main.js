@@ -1,25 +1,47 @@
 import { PersonnelFileDataModel } from "./dataModels.js";
 import { PersonnelFileSheet } from "./sheets.js";
 
+export const MODULE_ID = "coc-case-files-dev";
+
+const typeDev = `${MODULE_ID}.personnel-file`;
+const typeMain = "coc-case-files.personnel-file";
+
+// Immediate top-level DataModel registration so Foundry V14 schema validation passes during early document initialization
+if (globalThis.CONFIG?.JournalEntryPage) {
+  CONFIG.JournalEntryPage.dataModels[typeDev] = PersonnelFileDataModel;
+  CONFIG.JournalEntryPage.dataModels[typeMain] = PersonnelFileDataModel;
+  CONFIG.JournalEntryPage.typeLabels[typeDev] = "COC-CASE-FILES.PageType";
+  CONFIG.JournalEntryPage.typeLabels[typeMain] = "COC-CASE-FILES.PageType";
+  CONFIG.JournalEntryPage.typeIcons[typeDev] = "fas fa-user-secret";
+  CONFIG.JournalEntryPage.typeIcons[typeMain] = "fas fa-user-secret";
+}
+
 Hooks.once("init", () => {
-  console.log("coc-case-files | Initializing Call of Cthulhu Case Files Module");
+  console.log(`${MODULE_ID} | Initializing Call of Cthulhu Case Files Module (DEV)`);
 
-  const typeName = "coc-case-files.personnel-file";
+  // Ensure both document types are registered in JournalEntryPage.TYPES array for V14 schema validation
+  if (Array.isArray(JournalEntryPage.TYPES)) {
+    if (!JournalEntryPage.TYPES.includes(typeDev)) JournalEntryPage.TYPES.push(typeDev);
+    if (!JournalEntryPage.TYPES.includes(typeMain)) JournalEntryPage.TYPES.push(typeMain);
+  }
 
-  // Register Data Model for the Custom Journal Entry Page
-  CONFIG.JournalEntryPage.dataModels[typeName] = PersonnelFileDataModel;
-  CONFIG.JournalEntryPage.typeLabels[typeName] = "COC-CASE-FILES.PageType";
-  CONFIG.JournalEntryPage.typeIcons[typeName] = "fas fa-user-secret";
+  // Register Data Models for DEV and Main types
+  CONFIG.JournalEntryPage.dataModels[typeDev] = PersonnelFileDataModel;
+  CONFIG.JournalEntryPage.dataModels[typeMain] = PersonnelFileDataModel;
+  CONFIG.JournalEntryPage.typeLabels[typeDev] = "COC-CASE-FILES.PageType";
+  CONFIG.JournalEntryPage.typeLabels[typeMain] = "COC-CASE-FILES.PageType";
+  CONFIG.JournalEntryPage.typeIcons[typeDev] = "fas fa-user-secret";
+  CONFIG.JournalEntryPage.typeIcons[typeMain] = "fas fa-user-secret";
 
-  // Register the Sheet for the Custom Journal Entry Page
-  DocumentSheetConfig.registerSheet(JournalEntryPage, "coc-case-files", PersonnelFileSheet, {
-    types: [typeName],
+  // Register the Sheet for both custom page types
+  DocumentSheetConfig.registerSheet(JournalEntryPage, MODULE_ID, PersonnelFileSheet, {
+    types: [typeDev, typeMain],
     makeDefault: true,
     label: "COC-CASE-FILES.PageType"
   });
 
   // Register Module World Setting for Era Themes
-  game.settings.register("coc-case-files", "theme", {
+  game.settings.register(MODULE_ID, "theme", {
     name: game.i18n.localize("COC-CASE-FILES.SettingThemeName"),
     hint: game.i18n.localize("COC-CASE-FILES.SettingThemeHint"),
     scope: "world",
@@ -40,7 +62,7 @@ Hooks.once("init", () => {
   });
 
   // Listen for socket messages from non-Owner Observers proposing details
-  game.socket.on("module.coc-case-files", async (data) => {
+  game.socket.on(`module.${MODULE_ID}`, async (data) => {
     // Only GM processes incoming proposals from Observers
     if (!game.user.isGM) return;
 
@@ -51,7 +73,7 @@ Hooks.once("init", () => {
       const targetPage = await fromUuid(pageUuid);
 
       if (targetPage) {
-        await targetPage.setFlag("coc-case-files", `proposals.${field}`, value);
+        await targetPage.setFlag(MODULE_ID, `proposals.${field}`, value);
         
         ui.notifications.info(game.i18n.format("COC-CASE-FILES.ProposalReceived", { name: targetPage.name }));
 

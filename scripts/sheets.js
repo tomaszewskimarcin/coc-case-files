@@ -1,30 +1,32 @@
+import { MODULE_ID } from "./main.js";
+
 export class PersonnelFileSheet extends JournalPageSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["personnel-file-sheet"],
-      template: "modules/coc-case-files/templates/personnel-file-view.hbs"
+      template: `modules/${MODULE_ID}/templates/personnel-file-view.hbs`
     });
   }
 
   /** @override */
   get template() {
-    if (this.isEditable) return "modules/coc-case-files/templates/personnel-file-edit.hbs";
-    return "modules/coc-case-files/templates/personnel-file-view.hbs";
+    if (this.isEditable) return `modules/${MODULE_ID}/templates/personnel-file-edit.hbs`;
+    return `modules/${MODULE_ID}/templates/personnel-file-view.hbs`;
   }
 
   /**
    * Helper to get a unique storage key for per-user local draft inputs.
    */
   #getDraftStorageKey(fieldKey) {
-    return `coc-case-files-draft-${this.document.id}-${game.user.id}-${fieldKey}`;
+    return `${MODULE_ID}-draft-${this.document.id}-${game.user.id}-${fieldKey}`;
   }
 
   /**
    * Helper to get a unique storage key for per-user local player notepad.
    */
   #getNotepadStorageKey() {
-    return `coc-case-files-notepad-${this.document.id}-${game.user.id}`;
+    return `${MODULE_ID}-notepad-${this.document.id}-${game.user.id}`;
   }
 
   /** @override */
@@ -40,10 +42,10 @@ export class PersonnelFileSheet extends JournalPageSheet {
     const doc = this.document;
     const isGM = game.user.isGM;
     const canPropose = doc.testUserPermission(game.user, "OBSERVER");
-    const proposals = doc.getFlag("coc-case-files", "proposals") || {};
+    const proposals = doc.getFlag(MODULE_ID, "proposals") || {};
 
     // Get selected Era Theme setting
-    const theme = game.settings.get("coc-case-files", "theme") || "polska-80-90";
+    const theme = game.settings.get(MODULE_ID, "theme") || "polska-80-90";
     context.theme = theme;
 
     // Theme specific headers & watermarks
@@ -87,20 +89,20 @@ export class PersonnelFileSheet extends JournalPageSheet {
     }
 
     const fieldDefinitions = [
-      { key: "fullName", label: game.i18n.localize("COC-CASE-FILES.FullName"), value: doc.system.fullName || "" },
-      { key: "alias", label: game.i18n.localize("COC-CASE-FILES.Alias"), value: doc.system.alias || "" },
-      { key: "gender", label: game.i18n.localize("COC-CASE-FILES.Gender"), value: doc.system.gender || "" },
-      { key: "birthDate", label: game.i18n.localize("COC-CASE-FILES.BirthDate"), value: doc.system.birthDate || "" },
-      { key: "appearance.height", label: game.i18n.localize("COC-CASE-FILES.Height"), value: doc.system.appearance?.height || "" },
-      { key: "appearance.build", label: game.i18n.localize("COC-CASE-FILES.Build"), value: doc.system.appearance?.build || "" },
-      { key: "appearance.hair", label: game.i18n.localize("COC-CASE-FILES.Hair"), value: doc.system.appearance?.hair || "" },
-      { key: "appearance.eyes", label: game.i18n.localize("COC-CASE-FILES.Eyes"), value: doc.system.appearance?.eyes || "" },
-      { key: "appearance.marks", label: game.i18n.localize("COC-CASE-FILES.Marks"), value: doc.system.appearance?.marks || "" },
-      { key: "address", label: game.i18n.localize("COC-CASE-FILES.Address"), value: doc.system.address || "" }
+      { key: "fullName", label: game.i18n.localize("COC-CASE-FILES.FullName"), value: doc.system?.fullName || "" },
+      { key: "alias", label: game.i18n.localize("COC-CASE-FILES.Alias"), value: doc.system?.alias || "" },
+      { key: "gender", label: game.i18n.localize("COC-CASE-FILES.Gender"), value: doc.system?.gender || "" },
+      { key: "birthDate", label: game.i18n.localize("COC-CASE-FILES.BirthDate"), value: doc.system?.birthDate || "" },
+      { key: "appearance.height", label: game.i18n.localize("COC-CASE-FILES.Height"), value: doc.system?.appearance?.height || "" },
+      { key: "appearance.build", label: game.i18n.localize("COC-CASE-FILES.Build"), value: doc.system?.appearance?.build || "" },
+      { key: "appearance.hair", label: game.i18n.localize("COC-CASE-FILES.Hair"), value: doc.system?.appearance?.hair || "" },
+      { key: "appearance.eyes", label: game.i18n.localize("COC-CASE-FILES.Eyes"), value: doc.system?.appearance?.eyes || "" },
+      { key: "appearance.marks", label: game.i18n.localize("COC-CASE-FILES.Marks"), value: doc.system?.appearance?.marks || "" },
+      { key: "address", label: game.i18n.localize("COC-CASE-FILES.Address"), value: doc.system?.address || "" }
     ];
 
     const fields = fieldDefinitions.map(f => {
-      const val = f.value.trim();
+      const val = (f.value ?? "").toString().trim();
       const isLocked = Boolean(val);
       const rawProp = foundry.utils.getProperty(proposals, f.key) || proposals[f.key] || null;
       const draftVal = localStorage.getItem(this.#getDraftStorageKey(f.key)) || "";
@@ -123,9 +125,9 @@ export class PersonnelFileSheet extends JournalPageSheet {
     context.playerNotepad = localStorage.getItem(this.#getNotepadStorageKey()) || "";
 
     if (this.isEditable) {
-      context.editorContent = doc.system.description || "";
+      context.editorContent = doc.system?.description || "";
     } else {
-      context.descriptionHTML = await TextEditor.enrichHTML(doc.system.description || "", {
+      context.descriptionHTML = await TextEditor.enrichHTML(doc.system?.description || "", {
         secrets: doc.isOwner,
         async: true
       });
@@ -149,15 +151,15 @@ export class PersonnelFileSheet extends JournalPageSheet {
     // Helper to send proposal and clear local draft
     const sendProposal = async (field, val) => {
       const currentVal = foundry.utils.getProperty(this.document.system, field);
-      if (currentVal && currentVal.trim()) {
+      if (currentVal && String(currentVal).trim()) {
         ui.notifications.warn(game.i18n.localize("COC-CASE-FILES.FieldLockedWarn"));
         return;
       }
 
       if (this.document.isOwner || game.user.isGM) {
-        await this.document.setFlag("coc-case-files", `proposals.${field}`, val);
+        await this.document.setFlag(MODULE_ID, `proposals.${field}`, val);
       } else {
-        game.socket.emit("module.coc-case-files", {
+        game.socket.emit(`module.${MODULE_ID}`, {
           action: "propose",
           pageUuid: this.document.uuid,
           field: field,
@@ -224,7 +226,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
     approveBtns.forEach?.(btn => {
       btn.addEventListener("click", async () => {
         const field = btn.dataset.field;
-        const proposals = this.document.getFlag("coc-case-files", "proposals") || {};
+        const proposals = this.document.getFlag(MODULE_ID, "proposals") || {};
         const val = foundry.utils.getProperty(proposals, field) || proposals[field];
 
         if (val !== undefined) {
@@ -235,7 +237,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
           await this.document.update(updateData);
 
           // 2. Properly UNSET the flag in database
-          await this.document.unsetFlag("coc-case-files", `proposals.${field}`);
+          await this.document.unsetFlag(MODULE_ID, `proposals.${field}`);
 
           // 3. Award Chaos Point via async API call if coc-victory-points module is active
           const victoryPointsMod = game.modules.get("coc-victory-points");
@@ -264,7 +266,7 @@ export class PersonnelFileSheet extends JournalPageSheet {
         const field = btn.dataset.field;
 
         // Properly UNSET the flag in database
-        await this.document.unsetFlag("coc-case-files", `proposals.${field}`);
+        await this.document.unsetFlag(MODULE_ID, `proposals.${field}`);
 
         ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
 

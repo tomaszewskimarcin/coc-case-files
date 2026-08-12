@@ -1,6 +1,6 @@
 {
   "COC-CASE-FILES": {
-    "PageType": "Personnel File",
+    "PageType": "Personnel File (DEV)",
     "Role": "Role in Case",
     "Roles": {
       "suspect": "Suspect",
@@ -44,9 +44,8 @@
   },
   "TYPES": {
     "JournalEntryPage": {
-      "coc-case-files": {
-        "personnel-file": "Personnel File"
-      }
+      "coc-case-files-dev.personnel-file": "Personnel File (DEV)",
+      "coc-case-files.personnel-file": "Personnel File"
     }
   }
 }
