@@ -1,6 +1,6 @@
 import { CORE_LABEL_KEYS, DEFAULT_FIELDS_CONFIG } from "./main.js";
 
-export const MODULE_ID = "coc-case-files";
+export const MODULE_ID = "coc-case-files-dev";
 
 let _FieldsConfigApp = null;
 

@@ -1,8 +1,8 @@
 {
-  "id": "coc-case-files",
-  "title": "Call of Cthulhu Case Files",
-  "description": "Custom, interactive Journal Entry templates for Call of Cthulhu 7e investigations.",
-  "version": "1.3.0",
+  "id": "coc-case-files-dev",
+  "title": "Call of Cthulhu Case Files (DEV)",
+  "description": "[DEV TESTING VERSION] Custom, interactive Journal Entry templates.",
+  "version": "1.3.1-DEV",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -47,6 +47,6 @@
       }
     ]
   },
-  "manifest": "https://raw.githubusercontent.com/tomaszewskimarcin/coc-case-files/refs/heads/master/module.json",
-  "download": "https://github.com/tomaszewskimarcin/coc-case-files/archive/refs/heads/master.zip"
+  "manifest": "https://raw.githubusercontent.com/tomaszewskimarcin/coc-case-files/refs/heads/DEV-fields-config/module.json",
+  "download": "https://github.com/tomaszewskimarcin/coc-case-files/archive/refs/heads/DEV-fields-config.zip"
 }
