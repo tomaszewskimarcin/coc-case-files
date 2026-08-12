@@ -11,8 +11,8 @@
                     <th style="width: 26%;">{{localize "COC-CASE-FILES.TableHeaderLabel"}}</th>
                     <th style="width: 24%;">{{localize "COC-CASE-FILES.TableHeaderType"}}</th>
                     <th style="width: 28%;">{{localize "COC-CASE-FILES.TableHeaderOptions"}}</th>
-                    <th style="width: 8%;" class="text-center" title="Propozycje graczy">{{localize "COC-CASE-FILES.TableHeaderProposals"}}</th>
-                    <th style="width: 7%;" class="text-center" title="Widoczność pola">{{localize "COC-CASE-FILES.TableHeaderActive"}}</th>
+                    <th style="width: 8%;" class="text-center" title="{{localize 'COC-CASE-FILES.TooltipAllowProposals'}}">{{localize "COC-CASE-FILES.TableHeaderProposals"}}</th>
+                    <th style="width: 7%;" class="text-center" title="{{localize 'COC-CASE-FILES.TooltipActive'}}">{{localize "COC-CASE-FILES.TableHeaderActive"}}</th>
                     <th style="width: 7%;" class="text-center">{{localize "COC-CASE-FILES.TableHeaderActions"}}</th>
                 </tr>
             </thead>
@@ -34,21 +34,21 @@
                         </select>
                     </td>
                     <td class="field-options-cell">
-                        <input type="text" name="fields.{{index}}.optionsStr" value="{{field.optionsStr}}" placeholder="np. Podejrzany, Świadek, Ofiara" {{#unless (eq field.type "select")}}disabled{{/unless}}>
+                        <input type="text" name="fields.{{index}}.optionsStr" value="{{field.optionsStr}}" placeholder="{{localize 'COC-CASE-FILES.SelectOptionsPlaceholder'}}" {{#unless (eq field.type "select")}}disabled{{/unless}}>
                     </td>
                     <td class="text-center">
-                        <input type="checkbox" name="fields.{{index}}.allowProposals" {{#if field.allowProposals}}checked{{/if}}>
+                        <input type="checkbox" name="fields.{{index}}.allowProposals" {{#if field.allowProposals}}checked{{/if}} title="{{localize 'COC-CASE-FILES.TooltipAllowProposals'}}">
                     </td>
                     <td class="text-center">
                         {{#if field.isCore}}
-                            <input type="checkbox" name="fields.{{index}}.enabled" checked disabled title="Pola podstawowe są zawsze aktywne.">
+                            <input type="checkbox" name="fields.{{index}}.enabled" checked disabled title="{{localize 'COC-CASE-FILES.TooltipCoreFieldActive'}}">
                         {{else}}
-                            <input type="checkbox" name="fields.{{index}}.enabled" {{#if field.enabled}}checked{{/if}}>
+                            <input type="checkbox" name="fields.{{index}}.enabled" {{#if field.enabled}}checked{{/if}} title="{{localize 'COC-CASE-FILES.TooltipActive'}}">
                         {{/if}}
                     </td>
                     <td class="text-center actions-cell">
                         {{#if field.isCustom}}
-                            <button type="button" class="delete-field-btn" data-action="delete-field" data-index="{{index}}" title="Usuń pole customowe">
+                            <button type="button" class="delete-field-btn" data-action="delete-field" data-index="{{index}}" title="{{localize 'COC-CASE-FILES.DeleteCustomField'}}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         {{else}}

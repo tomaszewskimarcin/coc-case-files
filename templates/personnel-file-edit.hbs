@@ -15,7 +15,7 @@
     </div>
 
     <fieldset class="edit-section">
-        <legend>Dane Podstawowe & Pola Customowe</legend>
+        <legend>{{localize "COC-CASE-FILES.EditSectionTitle"}}</legend>
         {{#each fields as |field|}}
             {{#unless (eq field.key "fullName")}}
             <div class="form-group">
@@ -23,7 +23,7 @@
                 {{#if field.isCustom}}
                     {{#if field.isSelect}}
                         <select name="system.customData.{{field.key}}">
-                            <option value="">-- wybierz --</option>
+                            <option value="">-- {{localize "COC-CASE-FILES.SelectOption"}} --</option>
                             {{#each field.options as |opt|}}
                                 <option value="{{opt}}" {{#if (eq opt field.value)}}selected{{/if}}>{{opt}}</option>
                             {{/each}}
@@ -40,7 +40,7 @@
                 {{else}}
                     {{#if field.isSelect}}
                         <select name="system.{{field.key}}">
-                            <option value="">-- wybierz --</option>
+                            <option value="">-- {{localize "COC-CASE-FILES.SelectOption"}} --</option>
                             {{#each field.options as |opt|}}
                                 <option value="{{opt}}" {{#if (eq opt field.value)}}selected{{/if}}>{{opt}}</option>
                             {{/each}}

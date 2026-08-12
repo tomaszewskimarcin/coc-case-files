@@ -74,9 +74,10 @@ export function getFieldsConfigApp() {
         // Add custom field button listener
         root.querySelector("[data-action='add-field']")?.addEventListener("click", () => {
           const customKey = `custom_${Date.now()}`;
+          const defaultLabel = game.i18n?.localize ? game.i18n.localize("COC-CASE-FILES.NewFieldDefaultLabel") : "New Field";
           this.fields.push({
             key: customKey,
-            label: "Nowe Pole",
+            label: defaultLabel,
             type: "text",
             enabled: true,
             allowProposals: true,
@@ -117,7 +118,8 @@ export function getFieldsConfigApp() {
         });
 
         await game.settings.set(MODULE_ID, "fieldsConfig", updatedFields);
-        ui.notifications.info("Konfiguracja pól akt została pomyślnie zapisana.");
+        const savedMsg = game.i18n?.localize ? game.i18n.localize("COC-CASE-FILES.FieldsConfigSaved") : "Configuration saved.";
+        ui.notifications.info(savedMsg);
         ui.journals?.render(true);
       }
     };
