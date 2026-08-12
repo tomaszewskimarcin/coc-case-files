@@ -1,21 +1,44 @@
 import { MODULE_ID } from "./main.js";
 
-const ParentJournalPageSheet = foundry.applications?.sheets?.JournalPageSheet || foundry.applications?.sheets?.JournalEntryPageSheet || foundry.appv1?.sheets?.JournalPageSheet || JournalPageSheet;
+const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 const TextEditorImpl = foundry.applications?.ux?.TextEditor?.implementation || TextEditor;
 
-export class PersonnelFileSheet extends ParentJournalPageSheet {
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["personnel-file-sheet"],
-      template: `modules/${MODULE_ID}/templates/personnel-file-view.hbs`
-    });
-  }
+export class PersonnelFileSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+  
+  static DEFAULT_OPTIONS = {
+    classes: ["personnel-file-sheet"],
+    position: {
+      width: 720,
+      height: "auto"
+    },
+    form: {
+      submitOnChange: false,
+      closeOnSubmit: false
+    }
+  };
 
-  /** @override */
-  get template() {
-    if (this.isEditable) return `modules/${MODULE_ID}/templates/personnel-file-edit.hbs`;
-    return `modules/${MODULE_ID}/templates/personnel-file-view.hbs`;
+  /**
+   * Application V2 PARTS specification for template rendering
+   */
+  static PARTS = {
+    view: {
+      template: `modules/${MODULE_ID}/templates/personnel-file-view.hbs`
+    },
+    edit: {
+      template: `modules/${MODULE_ID}/templates/personnel-file-edit.hbs`
+    }
+  };
+
+  /**
+   * Dynamically choose which PARTS template to render based on sheet edit mode
+   */
+  _configureRenderOptions(options) {
+    super._configureRenderOptions(options);
+    if (this.isEditable) {
+      options.parts = ["edit"];
+    } else {
+      options.parts = ["view"];
+    }
   }
 
   /**
@@ -32,9 +55,12 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
     return `${MODULE_ID}-notepad-${this.document.id}-${game.user.id}`;
   }
 
-  /** @override */
-  async getData(options = {}) {
-    const context = await super.getData(options);
+  /**
+   * Prepare context data for Handlebars rendering in Application V2
+   */
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    
     context.roles = {
       "": game.i18n.localize("COC-CASE-FILES.UnassignedRole"),
       suspect: game.i18n.localize("COC-CASE-FILES.Roles.suspect"),
@@ -139,14 +165,17 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
     return context;
   }
 
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  /**
+   * Action / Event handling after DOM render in Application V2
+   */
+  _onRender(context, options) {
+    super._onRender(context, options);
 
-    const root = html[0] || html;
+    const root = this.element;
+    if (!root) return;
 
     // Player Notepad auto-save
-    const notepad = root.querySelector ? root.querySelector(".player-notepad") : $(root).find(".player-notepad")[0];
+    const notepad = root.querySelector(".player-notepad");
     notepad?.addEventListener("input", () => {
       localStorage.setItem(this.#getNotepadStorageKey(), notepad.value);
     });
@@ -177,9 +206,9 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
       this.render(false);
     };
 
-    // Auto-save player draft to localStorage as they type or select
-    const draftInputs = root.querySelectorAll ? root.querySelectorAll(".player-draft-input") : $(root).find(".player-draft-input");
-    draftInputs.forEach?.(input => {
+    // Auto-save player draft to localStorage as they type
+    const draftInputs = root.querySelectorAll(".player-draft-input");
+    draftInputs.forEach(input => {
       input.addEventListener("input", () => {
         const field = input.dataset.field;
         if (field) {
@@ -189,17 +218,18 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
     });
 
     // Auto-save role draft to localStorage
-    const roleSelect = root.querySelector ? root.querySelector(".role-draft-select") : $(root).find(".role-draft-select")[0];
+    const roleSelect = root.querySelector(".role-draft-select");
     roleSelect?.addEventListener("change", () => {
       if (roleSelect.value) {
         localStorage.setItem(this.#getDraftStorageKey("role"), roleSelect.value);
       }
     });
 
-    // Explicit Submit Proposal Button Listener (Draft workflow)
-    const submitBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='submit-proposal']") : $(root).find("[data-action='submit-proposal']");
-    submitBtns.forEach?.(btn => {
-      btn.addEventListener("click", async () => {
+    // Submit Proposal Buttons
+    const submitBtns = root.querySelectorAll("[data-action='submit-proposal']");
+    submitBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
         const field = btn.dataset.field;
         const row = btn.closest(".dossier-field-row");
         const input = row?.querySelector(".player-draft-input");
@@ -211,10 +241,11 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
       });
     });
 
-    // Explicit Submit Role Proposal Listener
-    const submitRoleBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='submit-role-proposal']") : $(root).find("[data-action='submit-role-proposal']");
-    submitRoleBtns.forEach?.(btn => {
-      btn.addEventListener("click", async () => {
+    // Submit Role Proposal Button
+    const submitRoleBtns = root.querySelectorAll("[data-action='submit-role-proposal']");
+    submitRoleBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
         const select = root.querySelector(".role-draft-select");
         const val = select?.value;
 
@@ -224,10 +255,11 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
       });
     });
 
-    // GM Approve button listener
-    const approveBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='approve-proposal']") : $(root).find("[data-action='approve-proposal']");
-    approveBtns.forEach?.(btn => {
-      btn.addEventListener("click", async () => {
+    // GM Approve Buttons
+    const approveBtns = root.querySelectorAll("[data-action='approve-proposal']");
+    approveBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
         const field = btn.dataset.field;
         const proposals = this.document.getFlag(MODULE_ID, "proposals") || {};
         const val = foundry.utils.getProperty(proposals, field) || proposals[field];
@@ -236,13 +268,9 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
           const updateData = {};
           updateData[`system.${field}`] = val;
 
-          // 1. Save directly to system data (locks the field)
           await this.document.update(updateData);
-
-          // 2. Properly UNSET the flag in database
           await this.document.unsetFlag(MODULE_ID, `proposals.${field}`);
 
-          // 3. Award Chaos Point via async API call if coc-victory-points module is active
           const victoryPointsMod = game.modules.get("coc-victory-points");
           if (victoryPointsMod?.active && victoryPointsMod.api) {
             if (typeof victoryPointsMod.api.addPoints === "function") {
@@ -250,30 +278,25 @@ export class PersonnelFileSheet extends ParentJournalPageSheet {
             }
           }
 
-          // 4. Chat announcement
           ChatMessage.create({
             content: game.i18n.format("COC-CASE-FILES.ApprovedMessage", { field }),
             whisper: ChatMessage.getWhisperRecipients("GM")
           });
 
-          // 5. In-place re-render to reflect database state
           this.render(false);
         }
       });
     });
 
-    // GM Reject button listener
-    const rejectBtns = root.querySelectorAll ? root.querySelectorAll("[data-action='reject-proposal']") : $(root).find("[data-action='reject-proposal']");
-    rejectBtns.forEach?.(btn => {
-      btn.addEventListener("click", async () => {
+    // GM Reject Buttons
+    const rejectBtns = root.querySelectorAll("[data-action='reject-proposal']");
+    rejectBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
         const field = btn.dataset.field;
 
-        // Properly UNSET the flag in database
         await this.document.unsetFlag(MODULE_ID, `proposals.${field}`);
-
         ui.notifications.info(game.i18n.localize("COC-CASE-FILES.ProposalRejected"));
-
-        // In-place re-render
         this.render(false);
       });
     });
